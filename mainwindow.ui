@@ -37,17 +37,17 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="editUserBtn">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>810</y>
-      <width>80</width>
-      <height>22</height>
+      <x>60</x>
+      <y>780</y>
+      <width>151</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Editace spotřebitelů</string>
     </property>
    </widget>
   </widget>

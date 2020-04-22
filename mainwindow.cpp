@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "QDate"
 #include "QDebug"
+#include "editusers.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,12 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     QDate date = ui->dateEdit->date();
     QString dateString = date.toString();
     qDebug()<<dateString;
-    QPushButton *button = ui->pushButton;
-    if (date.year() == 2020) {
-        button->setEnabled(true);
-    } else {
-        button->setEnabled(false);
-    }
+
 
 }
 
@@ -34,3 +30,10 @@ MainWindow::~MainWindow()
 }
 
 
+
+void MainWindow::on_editUserBtn_clicked()
+{
+    EditUsers editUsers;
+    editUsers.setModal(true);
+    editUsers.exec();
+}
