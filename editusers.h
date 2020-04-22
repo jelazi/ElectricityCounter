@@ -27,6 +27,7 @@ private slots:
 private:
     Ui::EditUsers *ui;
     void reloadUserTable();
+    void createUserTable();
 
     QStandardItemModel model;
 
