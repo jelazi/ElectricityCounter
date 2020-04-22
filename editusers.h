@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "QStandardItem"
 #include "QDebug"
+#include "adduserdialog.h"
 
 namespace Ui {
 class EditUsers;

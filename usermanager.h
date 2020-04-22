@@ -10,11 +10,14 @@ public:
     UserManager();
     QList<User> getUsers();
     void addUser (QString nameUser, float initialDesicion);
+    int getLastID();
 
 private:
     QList<User>usersList;
-    void loadDefaultUser();
+    void loadUsersFromJson();
     int idCounter = 0;
+    void setDefaultUser();
+    void saveCurrentUsersToJson();
 
 };
 

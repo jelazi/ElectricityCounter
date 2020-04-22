@@ -2,6 +2,7 @@
 #include "ui_editusers.h"
 #include "user.h"
 #include "usermanager.h"
+#include "jsonparser.h"
 
 QPushButton *okButton;
 QPushButton *cancelButton;
@@ -20,7 +21,14 @@ EditUsers::EditUsers(QWidget *parent): QDialog(parent), ui(new Ui::EditUsers) {
 
     userManager = new UserManager();
     createUserTable();
+    QString userJson = JsonParser::createJsonUserFile(userManager);
+    qDebug()<<userJson;
+    QList<User> users = JsonParser::getUsersFromJson(userJson);
+    foreach (User user, users) {
+        qDebug() <<user.name;
+    }
 }
+
 
 
 
@@ -55,9 +63,6 @@ void EditUsers::reloadUserTable() {
         QStandardItem *itemUserInitialDesicion = new QStandardItem(QString::number(usersList[i].initialDesicion));
         model.setItem(i, 2, itemUserInitialDesicion);
     }
-
-
-
       userTable->resizeRowsToContents();
       userTable->resizeColumnsToContents();
 }
@@ -73,6 +78,15 @@ void EditUsers::on_okButton_clicked() {
 }
 
 void EditUsers::on_addUserButton_clicked() {
-    userManager->addUser("blablabla", 0.15);
-    reloadUserTable();
+    AddUserDialog adduserDialog;
+    adduserDialog.setModal(true);
+    adduserDialog.addManager(*userManager);
+    int result = adduserDialog.exec();
+
+    if(result==QDialog::Accepted) {
+        reloadUserTable();
+    }
+    else {
+        reloadUserTable();
+    }
 }
