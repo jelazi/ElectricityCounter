@@ -5,34 +5,24 @@
 #include "editusers.h"
 
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     QDateEdit *dateEdit = ui->dateEdit;
-
-
 
     QDate now = QDate::currentDate();
     dateEdit->setDate(now);
     QDate date = ui->dateEdit->date();
     QString dateString = date.toString();
-    qDebug()<<dateString;
-
-
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
 
 
-void MainWindow::on_editUserBtn_clicked()
-{
+void MainWindow::on_editUserBtn_clicked() {
     EditUsers editUsers;
     editUsers.setModal(true);
     editUsers.exec();

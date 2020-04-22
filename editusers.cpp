@@ -3,7 +3,6 @@
 #include "user.h"
 #include "usermanager.h"
 
-
 QPushButton *okButton;
 QPushButton *cancelButton;
 QPushButton *addUser;
@@ -31,19 +30,15 @@ EditUsers::~EditUsers() {
 
 
 void EditUsers::reloadUserTable() {
-
     horizontalHeader.append("ID");
     horizontalHeader.append("Jméno");
     horizontalHeader.append("Počáteční stav");
-
-
 
     model.index(0,0,model.index(0,0));
     model.setHorizontalHeaderLabels(horizontalHeader);
     model.setVerticalHeaderLabels(verticalHeader);
 
     QList<User> usersList = userManager->getUsers();
-    qDebug() <<usersList[0].name;
     for(int i = 0; i < usersList.length();i++) {
         QStandardItem *itemUserID= new QStandardItem(QString::number(usersList[i].id));
         model.setItem(i, 0, itemUserID);
