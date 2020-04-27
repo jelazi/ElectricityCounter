@@ -3,41 +3,49 @@
 #include "QString"
 #include "QDoubleValidator"
 #include <QMessageBox>
+#include "structures.h"
 
 QLineEdit *nameLineEdit;
-QDoubleSpinBox *numberLineEdit;
+QDoubleSpinBox *numberLineEditNT;
+QDoubleSpinBox *numberLineEditVT;
 QString name;
-float number;
+Entry entryNT;
+Entry entryVT;
+
 
 AddUserDialog::AddUserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddUserDialog) {
     ui->setupUi(this);
     nameLineEdit = ui->nameLineEdit;
-    numberLineEdit = ui->number;
+    numberLineEditNT = ui->spinNT;
+    numberLineEditVT = ui->spinVT;
+    MyDate now = MyDate::getNowDate();
+    entryNT.date = now;
+    entryVT.date = now;
+    entryNT.type = TypeEntry::realNT;
+    entryVT.type = TypeEntry::realVT;
 }
 
 AddUserDialog::~AddUserDialog() {
     delete ui;
 }
 
-void AddUserDialog::addManager(UserManager userManagerRef) {
-    this->userManager = &userManagerRef;
-}
-
 
 bool AddUserDialog::isCorrectValues() {
+
     name = nameLineEdit->text();
     if (name.isNull() || name.isEmpty()) return false;
-    number = numberLineEdit->value();
-    if (number < 0) return false;
+    entryNT.value = numberLineEditNT->value();
+    entryVT.value = numberLineEditVT->value();
+    if (entryNT.value < 0 || entryVT.value < 0) return false;
     return true;
 }
 
 void AddUserDialog::on_okButton_clicked() {
     if (isCorrectValues()) {
-        userManager->addUser(name,number);
-        qDebug()<<userManager->getUsers()[4].name;
+        UserManager::getInstance()->addUser(name, entryNT, entryVT);
+
         this->close();
     } else {
         QMessageBox msgBox;
@@ -49,3 +57,5 @@ void AddUserDialog::on_okButton_clicked() {
 void AddUserDialog::on_cancelButton_clicked() {
     this->close();
 }
+
+

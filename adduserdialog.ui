@@ -38,12 +38,36 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Počáteční stav:</string>
+        <string>Počáteční stav NT:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="number"/>
+      <widget class="QDoubleSpinBox" name="spinNT">
+       <property name="decimals">
+        <number>2</number>
+       </property>
+       <property name="maximum">
+        <double>999999999.990000009536743</double>
+       </property>
+       <property name="singleStep">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Počáteční stav VT:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="spinVT">
+       <property name="maximum">
+        <double>999999999.990000009536743</double>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

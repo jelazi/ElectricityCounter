@@ -6,7 +6,7 @@ FileManager::FileManager() {
 
 }
 
-QString FileManager::loadTextFileWithPath(QString path){
+QString FileManager::loadTextFileWithPath(QString path) {
 
     QFile file(path);
     if (!file.exists()) {

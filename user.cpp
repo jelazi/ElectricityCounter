@@ -1,7 +1,121 @@
 #include "user.h"
 
-User::User(int inputId, QString inputName, float InputInitialDesicion) {
+User::User(int inputId, QString inputName, Entry InputInitialDesicionNT, Entry InputInitialDesicionVT) {
     this->id = inputId;
     this->name = inputName;
-    this->initialDesicion = InputInitialDesicion;
+    this->initialDesicionNT = InputInitialDesicionNT;
+    this->initialDesicionVT = InputInitialDesicionVT;
+}
+
+int User::getID() {
+    return id;
+}
+
+void User::setID(int inputID) {
+    if (this->id > 0) {
+       return;
+    }
+    this->id = inputID;
+}
+
+QList<Entry> User::getRealEntries(TypeEntry typeEntry) {
+    if (typeEntry == TypeEntry::realNT) {
+        return realEntriesNT;
+    } else {
+        return realEntriesVT;
+    }
+}
+
+QList<Entry> User::getInvoiceEntries(TypeEntry typeEntry) {
+    if (typeEntry == TypeEntry::invoiceNT) {
+        return realEntriesNT;
+    } else {
+        return realEntriesVT;
+    }
+}
+
+TypeMessageError User::addEntry(Entry entry) {
+    if (entry.type == TypeEntry::realNT) {
+        if (!isSameDateEntry(entry)) {
+            realEntriesNT.append(entry);
+            return TypeMessageError::correct;
+        } else {
+            qDebug() << "error: same date Entry";
+            return TypeMessageError::sameDate;
+        }
+    }
+    if (entry.type == TypeEntry::realVT) {
+        if (!isSameDateEntry(entry)) {
+            realEntriesVT.append(entry);
+            return TypeMessageError::correct;
+        } else {
+            qDebug() << "error: same date Entry";
+            return TypeMessageError::sameDate;
+        }
+    }
+    if (entry.type == TypeEntry::invoiceNT) {
+        if (!isSameDateEntry(entry)) {
+            invoiceEntriesNT.append(entry);
+            return TypeMessageError::correct;
+        } else {
+            qDebug() << "error: same date Entry";
+            return TypeMessageError::sameDate;
+        }
+    }
+    if (entry.type == TypeEntry::invoiceVT) {
+        if (!isSameDateEntry(entry)) {
+            invoiceEntriesVT.append(entry);
+            return TypeMessageError::correct;
+        } else {
+            qDebug() << "error: same date Entry";
+            return TypeMessageError::sameDate;
+        }
+    }
+    return TypeMessageError::anotherError;
+}
+
+
+
+QJsonArray User::entriesToJson(QList<Entry> entries) {
+    QJsonArray array;
+       for (Entry entry : entries)
+          array.append(entry.toJson());
+       return array;
+}
+
+
+QList<Entry> User::entriesFromJson (QJsonArray array) {
+    QList<Entry> entries;
+    foreach (QJsonValue entryJson, array) {
+        QJsonObject entryObject = entryJson.toObject();
+        Entry entry;
+        entry.date = MyDate (entryObject["date"].toString());
+        entry.user = entryObject["user"].toString();
+        entry.type = (entryObject["type"] == "NT") ? TypeEntry::realNT : TypeEntry::realVT;
+        entry.value = entryObject["value"].toDouble();
+        entries.push_back(entry);
+    }
+    return entries;
+}
+
+bool User::isSameDateEntry(Entry inputEntry) {
+    QList <Entry> entries;
+    if (inputEntry.type == TypeEntry::realNT) {
+        entries = this->realEntriesNT;
+    }
+    if (inputEntry.type == TypeEntry::realVT) {
+        entries = this->realEntriesVT;
+    }
+    if (inputEntry.type == TypeEntry::invoiceNT) {
+        entries = this->invoiceEntriesNT;
+    }
+    if (inputEntry.type == TypeEntry::invoiceVT) {
+        entries = this->invoiceEntriesVT;
+    }
+
+    foreach (Entry ent, entries) {
+        if (ent.date.compareDates(inputEntry.date) == 0) return true;
+    }
+
+    return false;
 }

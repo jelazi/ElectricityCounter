@@ -5,19 +5,28 @@
 #include "QDebug"
 
 
+
 class UserManager {
 public:
-    UserManager();
+    static UserManager* getInstance();
+
     QList<User> getUsers();
-    void addUser (QString nameUser, float initialDesicion);
-    int getLastID();
+    void addUser (QString nameUser, Entry initialDesicionNT, Entry initialDesicionVT);
+    void saveCurrentUsersToJson();
+    bool removeUser(int ID);
+    int getLastFreeID();
+    QList<QString> getNameUsers ();
+    TypeMessageError addEntries(QList<Entry> entries);
+    User* getUserByName(QString name);
 
 private:
+    static UserManager* instance;
+    UserManager();
     QList<User>usersList;
     void loadUsersFromJson();
     int idCounter = 0;
     void setDefaultUser();
-    void saveCurrentUsersToJson();
+
 
 };
 

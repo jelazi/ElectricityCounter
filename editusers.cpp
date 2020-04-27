@@ -3,12 +3,12 @@
 #include "user.h"
 #include "usermanager.h"
 #include "jsonparser.h"
+#include <QMessageBox>
 
 QPushButton *okButton;
 QPushButton *cancelButton;
 QPushButton *addUser;
 QTableView *userTable;
-UserManager *userManager;
 
 
 EditUsers::EditUsers(QWidget *parent): QDialog(parent), ui(new Ui::EditUsers) {
@@ -19,13 +19,12 @@ EditUsers::EditUsers(QWidget *parent): QDialog(parent), ui(new Ui::EditUsers) {
     addUser = ui->addUserButton;
     userTable = ui->userTable;
 
-    userManager = new UserManager();
     createUserTable();
-    QString userJson = JsonParser::createJsonUserFile(userManager);
-    qDebug()<<userJson;
+    QString userJson = JsonParser::createJsonUserFile();
+   // qDebug()<<userJson;
     QList<User> users = JsonParser::getUsersFromJson(userJson);
     foreach (User user, users) {
-        qDebug() <<user.name;
+  //      qDebug() <<user.name;
     }
 }
 
@@ -37,34 +36,65 @@ EditUsers::~EditUsers() {
 }
 
 void EditUsers::createUserTable() {
+
     horizontalHeader.append("ID");
     horizontalHeader.append("Jméno");
-    horizontalHeader.append("Počáteční stav");
-
-    model.index(0,0,model.index(0,0));
-    model.setHorizontalHeaderLabels(horizontalHeader);
-    model.setVerticalHeaderLabels(verticalHeader);
+    horizontalHeader.append("Počátek NT");
+    horizontalHeader.append("Datum počátku NT");
+    horizontalHeader.append("Počátek VT");
+    horizontalHeader.append("Datum počátku VT");
 
     userTable->setModel(&model);
     reloadUserTable();
+    userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    userTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
 }
 
 
 
 void EditUsers::reloadUserTable() {
+    QList<User> usersList = UserManager::getInstance()->getUsers();
+    model.clear();
 
 
-    QList<User> usersList = userManager->getUsers();
+    model.setHorizontalHeaderLabels(horizontalHeader);
+    model.setVerticalHeaderLabels(verticalHeader);
+
+
     for(int i = 0; i < usersList.length();i++) {
-        QStandardItem *itemUserID= new QStandardItem(QString::number(usersList[i].id));
+        QStandardItem *itemUserID= new QStandardItem(QString::number(usersList[i].getID()));
         model.setItem(i, 0, itemUserID);
+
         QStandardItem *itemUserName = new QStandardItem(QString(usersList[i].name));
         model.setItem(i, 1, itemUserName);
-        QStandardItem *itemUserInitialDesicion = new QStandardItem(QString::number(usersList[i].initialDesicion));
-        model.setItem(i, 2, itemUserInitialDesicion);
+
+        QStandardItem *itemUserInitialDesicionNT = new QStandardItem(QString::number(usersList[i].initialDesicionNT.value, 'f', 2));
+        model.setItem(i, 2, itemUserInitialDesicionNT);
+
+
+        QStandardItem *itemUserInitialDesicionNTDate = new QStandardItem(usersList[i].initialDesicionNT.date.toString());
+        model.setItem(i, 3, itemUserInitialDesicionNTDate);
+
+
+        QStandardItem *itemUserInitialDesicionVT = new QStandardItem(QString::number(usersList[i].initialDesicionVT.value, 'f', 2));
+        model.setItem(i, 4, itemUserInitialDesicionVT);
+
+        QStandardItem *itemUserInitialDesicionVTDate = new QStandardItem(usersList[i].initialDesicionVT.date.toString());
+        model.setItem(i, 5, itemUserInitialDesicionVTDate);
     }
       userTable->resizeRowsToContents();
       userTable->resizeColumnsToContents();
+}
+
+int EditUsers::countDigits(double num) {
+     int temp = num;
+     int count = 0;
+     while(temp != 0) {
+             count++;
+             temp /= 10;
+         }
+     return count;
 }
 
 
@@ -74,13 +104,13 @@ void EditUsers::on_cancelButton_clicked() {
 }
 
 void EditUsers::on_okButton_clicked() {
+    UserManager::getInstance()->saveCurrentUsersToJson();
     this->close();
 }
 
 void EditUsers::on_addUserButton_clicked() {
     AddUserDialog adduserDialog;
     adduserDialog.setModal(true);
-    adduserDialog.addManager(*userManager);
     int result = adduserDialog.exec();
 
     if(result==QDialog::Accepted) {
@@ -89,4 +119,19 @@ void EditUsers::on_addUserButton_clicked() {
     else {
         reloadUserTable();
     }
+}
+
+void EditUsers::on_userTable_doubleClicked(const QModelIndex &index) {
+    int row = index.row();
+    User selectedUser = UserManager::getInstance()->getUsers()[row];
+    QMessageBox reply;
+    reply.setWindowTitle("Vymazání uživatele");
+    reply.setText("Chcete vymazat uživatele: " + selectedUser.name + "?");
+     QAbstractButton *myYesButton = reply.addButton(("Ano"), QMessageBox::YesRole);
+     QAbstractButton *myNoButton = reply.addButton(("Ne"), QMessageBox::NoRole);
+    reply.exec();
+     if (reply.clickedButton() == myYesButton) {
+       UserManager::getInstance()->removeUser(selectedUser.getID());
+       reloadUserTable();
+     }
 }

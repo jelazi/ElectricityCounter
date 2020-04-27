@@ -1,4 +1,6 @@
 #include "jsonparser.h"
+#include <QString>
+#include <QJsonObject>
 
 JsonParser::JsonParser() {
 
@@ -6,29 +8,75 @@ JsonParser::JsonParser() {
 
 QJsonObject JsonParser::userToJson(User user) {
     QJsonObject object;
-    object["ID"] = user.id;
+    object["ID"] = user.getID();
     object["name"] = user.name;
-    object["initialDesicion"] = user.initialDesicion;
+    QJsonObject initialDesicionNT;
+    QJsonObject initialDesicionVT;
+    initialDesicionNT["date"] = user.initialDesicionNT.date.toString();
+    initialDesicionNT["value"] = user.initialDesicionNT.value;
+    initialDesicionVT["date"] = user.initialDesicionVT.date.toString();
+    initialDesicionVT["value"] = user.initialDesicionVT.value;
+    object["initialDesicionNT"] = initialDesicionNT;
+    object["initialDesicionVT"] = initialDesicionVT;
+    QJsonArray realEntriesVT = User::entriesToJson(user.realEntriesVT);
+    object["realEntriesVT"] = realEntriesVT;
+    QJsonArray realEntriesNT = User::entriesToJson(user.realEntriesNT);
+    object["realEntriesNT"] = realEntriesNT;
+    QJsonArray invoiceEntriesVT = User::entriesToJson(user.invoiceEntriesVT);
+    object["invoiceEntriesVT"] = invoiceEntriesVT;
+    QJsonArray invoiceEntriesNT = User::entriesToJson(user.invoiceEntriesNT);
+    object["invoiceEntriesNT"] = invoiceEntriesNT;
     return object;
 }
 
 User JsonParser::jsonToUser(QJsonObject object) {
     QJsonValue IDValue = object.value("ID");
-    int ID = IDValue.toString().toInt();
+    int ID = IDValue.toInt();
 
     QJsonValue nameValue = object.value("name");
     QString name = nameValue.toString();
 
-    QJsonValue initialDesicionValue = object.value("initialDesicion");
-    float initialDesicion = initialDesicionValue.toString().toFloat();
+    QJsonValue initialDesicionNTValue = object.value("initialDesicionNT");
+    QJsonValue initialDesicionVTValue = object.value("initialDesicionVT");
 
-    User *user = new User(ID, name, initialDesicion);
+    QJsonObject initialDesicionNTObject = initialDesicionNTValue.toObject();
+
+    QJsonObject initialDesicionVTObject = initialDesicionVTValue.toObject();
+
+    Entry initialDesicionNT;
+    initialDesicionNT.date = * new MyDate(initialDesicionNTObject.value("date").toString());
+    initialDesicionNT.value = initialDesicionNTObject.value("value").toDouble();
+
+    initialDesicionNT.type = TypeEntry::realNT;
+
+    Entry initialDesicionVT;
+    initialDesicionVT.date = * new MyDate(initialDesicionVTObject.value("date").toString());
+    initialDesicionVT.value = initialDesicionVTObject.value("value").toDouble();
+    initialDesicionVT.type = TypeEntry::realVT;
+
+    User *user = new User(ID, name, initialDesicionNT, initialDesicionVT);
+
+    QJsonValue arrayRealEntriesNTValue = object.value("realEntriesNT");
+    QJsonValue arrayRealEntriesVTValue = object.value("realEntriesVT");
+
+    QJsonArray arrayRealEntriesNT = arrayRealEntriesNTValue.toArray();
+    user->realEntriesNT = User::entriesFromJson(arrayRealEntriesNT);
+    QJsonArray arrayRealEntriesVT = arrayRealEntriesVTValue.toArray();
+    user->realEntriesVT = User::entriesFromJson(arrayRealEntriesVT);
+
+    QJsonValue arrayInvoiceEntriesNTValue = object.value("invoiceEntriesNT");
+    QJsonValue arrayInvoiceEntriesVTValue = object.value("invoiceEntriesVT");
+
+    QJsonArray arrayInvoiceEntriesNT = arrayInvoiceEntriesNTValue.toArray();
+    user->invoiceEntriesNT = User::entriesFromJson(arrayInvoiceEntriesNT);
+    QJsonArray arrayInvoiceEntriesVT = arrayInvoiceEntriesVTValue.toArray();
+    user->invoiceEntriesVT = User::entriesFromJson(arrayInvoiceEntriesVT);
     return *user;
 }
 
 
-QString JsonParser::createJsonUserFile(UserManager *userManager) {
-    QList <User> userList = userManager->getUsers();
+QString JsonParser::createJsonUserFile() {
+    QList <User> userList = UserManager::getInstance()->getUsers();
     QJsonDocument document;
     QJsonObject rootObject;
     for (int i = 0; i < userList.length();i++) {
@@ -45,12 +93,12 @@ QList <User> JsonParser::getUsersFromJson (QString json) {
     foreach(const QString& key, jsonObject.keys()) {
             QJsonValue value = jsonObject[key];
             QJsonObject object = value.toObject();
-            QString name = object["name"].toString();
-            int ID = object["ID"].toInt();
-            float initialDesicion = object["initialDesicion"].toDouble();
-            if (!name.isNull() && !name.isEmpty() && ID > 0 && initialDesicion >= 0) {
-                User *user = new User(ID, name, initialDesicion);
-                users.append(*user);
+            User user = jsonToUser(object);
+
+            if (!user.name.isNull() && !user.name.isEmpty() && user.getID() > 0 && user.initialDesicionNT.value >= 0 && user.initialDesicionVT.value >= 0) {
+                users.append(user);
+            } else {
+                qDebug()<< "noCorrect user data";
             }
         }
 

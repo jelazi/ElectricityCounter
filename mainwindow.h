@@ -19,6 +19,8 @@ public:
 private slots:
     void on_editUserBtn_clicked();
 
+    void on_btnAddEntry_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -15,7 +15,6 @@ class AddUserDialog : public QDialog
 public:
     explicit AddUserDialog(QWidget *parent = nullptr);
     ~AddUserDialog();
-    void addManager(UserManager userManager);
 
 
 private slots:
@@ -24,7 +23,6 @@ private slots:
 
 private:
     Ui::AddUserDialog *ui;
-    UserManager *userManager;
     bool isCorrectValues();
 };
 

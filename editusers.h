@@ -25,6 +25,8 @@ private slots:
 
     void on_addUserButton_clicked();
 
+    void on_userTable_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::EditUsers *ui;
     void reloadUserTable();
@@ -32,19 +34,9 @@ private:
 
     QStandardItemModel model;
 
-    QModelIndex modelIndex;
-
-    QStandardItem *item00;
-    QStandardItem *item01;
-    QStandardItem *item02;
-    QStandardItem *item03;
-    QStandardItem *item10;
-    QStandardItem *item11;
-    QStandardItem *item12;
-    QStandardItem *item13;
-
     QStringList horizontalHeader;
     QStringList verticalHeader;
+    int countDigits(double num);
 };
 
 #endif // EDITUSERS_H

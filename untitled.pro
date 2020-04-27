@@ -16,25 +16,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addnewentry.cpp \
     adduserdialog.cpp \
     editusers.cpp \
     filemanager.cpp \
     jsonparser.cpp \
     main.cpp \
     mainwindow.cpp \
+    mydate.cpp \
     user.cpp \
     usermanager.cpp
 
 HEADERS += \
+    addnewentry.h \
     adduserdialog.h \
     editusers.h \
     filemanager.h \
     jsonparser.h \
     mainwindow.h \
+    mydate.h \
+    structures.h \
     user.h \
     usermanager.h
 
 FORMS += \
+    addnewentry.ui \
     adduserdialog.ui \
     editusers.ui \
     mainwindow.ui
