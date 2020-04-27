@@ -13,7 +13,7 @@ public:
     JsonParser();
     static QJsonObject userToJson(User user);
     static User jsonToUser(QJsonObject object);
-    static QString createJsonUserFile ();
+    static QString createJsonUserFile (QList <User> userList);
     static QList <User> getUsersFromJson (QString json);
 };
 

@@ -75,8 +75,8 @@ User JsonParser::jsonToUser(QJsonObject object) {
 }
 
 
-QString JsonParser::createJsonUserFile() {
-    QList <User> userList = UserManager::getInstance()->getUsers();
+QString JsonParser::createJsonUserFile(QList <User> userList) {
+
     QJsonDocument document;
     QJsonObject rootObject;
     for (int i = 0; i < userList.length();i++) {

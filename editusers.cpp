@@ -20,7 +20,7 @@ EditUsers::EditUsers(QWidget *parent): QDialog(parent), ui(new Ui::EditUsers) {
     userTable = ui->userTable;
 
     createUserTable();
-    QString userJson = JsonParser::createJsonUserFile();
+    QString userJson = JsonParser::createJsonUserFile(UserManager::getInstance()->getUsers());
    // qDebug()<<userJson;
     QList<User> users = JsonParser::getUsersFromJson(userJson);
     foreach (User user, users) {
@@ -40,9 +40,9 @@ void EditUsers::createUserTable() {
     horizontalHeader.append("ID");
     horizontalHeader.append("Jméno");
     horizontalHeader.append("Počátek NT");
-    horizontalHeader.append("Datum počátku NT");
+    horizontalHeader.append("Datum NT");
     horizontalHeader.append("Počátek VT");
-    horizontalHeader.append("Datum počátku VT");
+    horizontalHeader.append("Datum VT");
 
     userTable->setModel(&model);
     reloadUserTable();
@@ -124,14 +124,31 @@ void EditUsers::on_addUserButton_clicked() {
 void EditUsers::on_userTable_doubleClicked(const QModelIndex &index) {
     int row = index.row();
     User selectedUser = UserManager::getInstance()->getUsers()[row];
+
     QMessageBox reply;
-    reply.setWindowTitle("Vymazání uživatele");
-    reply.setText("Chcete vymazat uživatele: " + selectedUser.name + "?");
-     QAbstractButton *myYesButton = reply.addButton(("Ano"), QMessageBox::YesRole);
-     QAbstractButton *myNoButton = reply.addButton(("Ne"), QMessageBox::NoRole);
+    reply.setWindowTitle("Editace uživatele");
+    reply.setText("Co chcete s uživatelem: " + selectedUser.name + " udělat?");
+     QAbstractButton *myYesButton = reply.addButton(("Editovat"), QMessageBox::YesRole);
+     QAbstractButton *myNoButton = reply.addButton(("Vymazat"), QMessageBox::YesRole);
+     reply.addButton(("Storno"), QMessageBox::NoRole);
     reply.exec();
      if (reply.clickedButton() == myYesButton) {
-       UserManager::getInstance()->removeUser(selectedUser.getID());
-       reloadUserTable();
+         AddUserDialog adduserDialog;
+         adduserDialog.setModal(true);
+
+         adduserDialog.setUser(selectedUser);
+         int result = adduserDialog.exec();
+
+
+         if(result==QDialog::Accepted) {
+             reloadUserTable();
+         }
+         else {
+             reloadUserTable();
+         }
+     }
+     if (reply.clickedButton() == myNoButton) {
+         UserManager::getInstance()->removeUser(selectedUser.getID());
+         reloadUserTable();
      }
 }

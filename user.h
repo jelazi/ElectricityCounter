@@ -21,6 +21,9 @@ public:
     TypeMessageError addEntry(Entry entry);
     static QJsonArray entriesToJson(QList<Entry> entries);
     static QList<Entry> entriesFromJson (QJsonArray array);
+    QList <Entry> getAllEntries();
+    double getSummary (TypeEntry typeEntry);
+    bool isCorrectNewSum (TypeEntry typeEntry, double newSum);
 
 private:
     int id;

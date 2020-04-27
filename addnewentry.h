@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "mydate.h"
 #include <QMessageBox>
+#include "structures.h"
 
 namespace Ui {
 class AddNewEntry;
@@ -20,11 +21,16 @@ private slots:
     void on_cancelButton_clicked();
     void fillUsers();
     void on_okButton_clicked();
-    void getValues();
+    TypeMessageError getValues();
+
+    void on_monthComboBox_currentIndexChanged(int index);
+
+    void on_yearComboBox_currentIndexChanged(int index);
 
 private:
     Ui::AddNewEntry *ui;
     void fillYearsList();
+    QList <Entry> entries;
 };
 
 #endif // ADDNEWENTRY_H

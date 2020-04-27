@@ -119,3 +119,58 @@ bool User::isSameDateEntry(Entry inputEntry) {
 
     return false;
 }
+
+
+QList <Entry> User::getAllEntries () {
+    QList <Entry> entries;
+    entries.append(realEntriesNT);
+    entries.append(realEntriesVT);
+    entries.append(invoiceEntriesNT);
+    entries.append(invoiceEntriesVT);
+
+   std::sort(entries.begin(), entries.end(),
+             [](Entry & a, Entry & b) -> bool
+         {
+             return a.date.isLessThan(b.date);
+         });
+    return entries;
+}
+
+double User::getSummary(TypeEntry typeEntry) {
+
+    int sum = 0;
+    switch (typeEntry) {
+    case TypeEntry::realNT : {
+        sum = initialDesicionNT.value;
+        foreach (Entry entry, realEntriesNT) {
+            sum += entry.value;
+        }
+            break;
+        }
+    case TypeEntry::realVT : {
+        sum = initialDesicionVT.value;
+        foreach (Entry entry, realEntriesVT) {
+            sum += entry.value;
+        }
+            break;
+        }
+    case TypeEntry::invoiceNT : {
+        foreach (Entry entry, invoiceEntriesNT) {
+            sum += entry.value;
+        }
+            break;
+        }
+    case TypeEntry::invoiceVT : {
+        foreach (Entry entry, invoiceEntriesVT) {
+            sum += entry.value;
+        }
+            break;
+        }
+    }
+    return sum;
+}
+
+bool User::isCorrectNewSum(TypeEntry typeEntry, double newSum) {
+    int beforeSum = getSummary(typeEntry);
+    return (beforeSum <=newSum);
+}

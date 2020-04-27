@@ -11,12 +11,15 @@ QDoubleSpinBox *numberLineEditVT;
 QString name;
 Entry entryNT;
 Entry entryVT;
+bool isNew = true;
+int userId = 0;
 
 
 AddUserDialog::AddUserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddUserDialog) {
     ui->setupUi(this);
+    this->setWindowTitle("Přidání uživatele");
     nameLineEdit = ui->nameLineEdit;
     numberLineEditNT = ui->spinNT;
     numberLineEditVT = ui->spinVT;
@@ -25,10 +28,23 @@ AddUserDialog::AddUserDialog(QWidget *parent) :
     entryVT.date = now;
     entryNT.type = TypeEntry::realNT;
     entryVT.type = TypeEntry::realVT;
+
 }
 
 AddUserDialog::~AddUserDialog() {
     delete ui;
+}
+
+void AddUserDialog::setUser (User user) {
+    isNew = false;
+    userId = user.getID();
+    name = user.name;
+    entryNT = user.initialDesicionNT;
+    entryVT = user.initialDesicionVT;
+    nameLineEdit->setText(name);
+    numberLineEditNT->setValue(entryNT.value);
+    numberLineEditVT->setValue(entryVT.value);
+    this->setWindowTitle("Editace uživatele");
 }
 
 
@@ -44,11 +60,18 @@ bool AddUserDialog::isCorrectValues() {
 
 void AddUserDialog::on_okButton_clicked() {
     if (isCorrectValues()) {
-        UserManager::getInstance()->addUser(name, entryNT, entryVT);
+        if (isNew) {
+            UserManager::getInstance()->addUser(name, entryNT, entryVT);
+            this->close();
+        } else {
+            User *user = new User(userId, name, entryNT, entryVT);
+            UserManager::getInstance()->updateUser(*user);
+            this->close();
+        }
 
-        this->close();
     } else {
         QMessageBox msgBox;
+        msgBox.setWindowTitle("Chybná data");
         msgBox.setText("Špatně zadaná data");
         msgBox.exec();
     }

@@ -12,8 +12,10 @@ enum TypeEntry {
 };
 
 
+
 enum TypeMessageError {
     sameDate,
+    wrongInputData,
     anotherError,
     correct
 };

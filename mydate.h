@@ -18,9 +18,11 @@ public:
     int getYear ();
     static MyDate getNowDate();
     QJsonObject toJson();
+    bool isSameDate(MyDate anotherDate);
 
     // -1 is early, 0 is same, 1 is later
     int compareDates(MyDate anotherDate);
+    bool isLessThan (MyDate anotherDate);
 
 private:
     int month;

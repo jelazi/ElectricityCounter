@@ -18,6 +18,10 @@ public:
     QList<QString> getNameUsers ();
     TypeMessageError addEntries(QList<Entry> entries);
     User* getUserByName(QString name);
+    QList<QString> getAllDates();
+    double getRatioUserEntry (Entry entry);
+    QList<Entry> getEntriesForCompare(Entry entry);
+    void updateUser(User user);
 
 private:
     static UserManager* instance;

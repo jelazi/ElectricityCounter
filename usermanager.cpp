@@ -64,13 +64,12 @@ void UserManager::setDefaultUser() {
     addUser("Činčalovi", entryNT, entryVT);
     addUser("Žižkovi", entryNT, entryVT);
     addUser("Čapkovi", entryNT, entryVT);
-
     saveCurrentUsersToJson();
 }
 
 
 void UserManager::saveCurrentUsersToJson() {
-    QString jsonString = JsonParser::createJsonUserFile();
+    QString jsonString = JsonParser::createJsonUserFile(usersList);
     FileManager::setTextToJsonFile(pathUserJson, jsonString);
 }
 
@@ -129,3 +128,73 @@ User* UserManager::getUserByName(QString name) {
     qDebug()<<"error find user in usersList";
     return &usersList[0];
 }
+
+QList<QString> UserManager::getAllDates() {
+    QList<QString> allDates;
+    QList <Entry> entries;
+    foreach (User user, usersList) {
+        entries.append(user.getAllEntries());
+
+        }
+    std::sort(entries.begin(), entries.end(),
+              [](Entry & a, Entry & b) -> bool
+          {
+              return a.date.isLessThan(b.date);
+          });
+
+    foreach (Entry entry, entries) {
+        QString nameDate;
+        if (entry.type == TypeEntry::realNT) {
+            nameDate = "Sk NT: " + entry.date.toStringWithName();
+        }
+        if (entry.type == TypeEntry::realVT) {
+            nameDate = "Sk VT: " + entry.date.toStringWithName();
+        }
+        if (entry.type == TypeEntry::invoiceNT) {
+            nameDate = "Fa NT: " + entry.date.toStringWithName();
+        }
+        if (entry.type == TypeEntry::invoiceVT) {
+            nameDate = "Fa VT: " + entry.date.toStringWithName();
+        }
+
+        if(!allDates.contains(nameDate)) {
+            allDates.push_back(nameDate);
+            allDates.push_back("% " + nameDate);
+        }
+    }
+    return allDates;
+}
+
+double UserManager::getRatioUserEntry(Entry entry) {
+    QList <Entry> entriesCompare = getEntriesForCompare(entry);
+    double sum = 0.0;
+    foreach (Entry entry, entriesCompare) {
+        sum += entry.value;
+    }
+    if (entry.value == 0) return 0;
+    return entry.value / sum;
+}
+
+QList<Entry> UserManager::getEntriesForCompare(Entry entry) {
+    QList <Entry> entriesCompare;
+    foreach (User user, usersList) {
+        foreach (Entry ent, user.getAllEntries()) {
+            if (entry.type == ent.type && entry.date.isSameDate(ent.date)) {
+                entriesCompare.append(ent);
+            }
+        }
+    }
+    return entriesCompare;
+}
+
+void UserManager::updateUser(User user) {
+    for (int i = 0; i < usersList.length(); i++) {
+        if (usersList[i].getID() == user.getID()) {
+           usersList[i].name = user.name;
+           usersList[i].initialDesicionNT = user.initialDesicionNT;
+           usersList[i].initialDesicionVT = user.initialDesicionVT;
+        }
+    }
+}
+
+

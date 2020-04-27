@@ -15,6 +15,7 @@ class AddUserDialog : public QDialog
 public:
     explicit AddUserDialog(QWidget *parent = nullptr);
     ~AddUserDialog();
+    void setUser(User user);
 
 
 private slots:
