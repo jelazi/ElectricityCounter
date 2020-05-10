@@ -2,6 +2,12 @@
 
 QList<QString> nameMonths = {"leden", "únor", "březen", "duben", "květen", "červen", "červenec", "srpen", "září", "říjen", "listopad", "prosinec"};
 
+MyDate::MyDate(){
+  this->month = 1;
+  this->year = 2016;
+
+}
+
 MyDate::MyDate(int month, int year) {
     if (!(month > 0 && month < 13 && year > 2015 && year < 2100)) {
         qDebug()<< "no correct data";
@@ -52,7 +58,7 @@ int MyDate::compareDates(MyDate anotherDate) {
     return 0;
 }
 
-MyDate MyDate::getNowDate() {
+MyDate MyDate::getCurrentDate() {
     QDate now = QDate::currentDate();
     MyDate *myDate = new MyDate (now.month(), now.year());
     return *myDate;
@@ -74,4 +80,9 @@ bool MyDate::isLessThan(MyDate anotherDate) {
 bool MyDate::isSameDate(MyDate anotherDate) {
     if (this->year == anotherDate.year && this->month == anotherDate.month) return true;
     return false;
+}
+
+QList <QString> MyDate::getListNameMonths() {
+  QList<QString> months = {"leden", "únor", "březen", "duben", "květen", "červen", "červenec", "srpen", "září", "říjen", "listopad", "prosinec"};
+  return months;
 }

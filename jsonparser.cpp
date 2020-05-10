@@ -29,6 +29,38 @@ QJsonObject JsonParser::userToJson(User user) {
     return object;
 }
 
+
+QJsonObject JsonParser::invoiceToJson(Invoice invoice) {
+    QJsonObject object;
+     object["fixedRateNT"] = invoice.fixedRateNT;
+     object["fixedRateVT"] = invoice.fixedRateVT;
+     object["variableRateNT"] = invoice.variableRateNT;
+     object["variableRateVT"] = invoice.variableRateVT;
+      object["date"] = invoice.date.toString();
+     return object;
+}
+
+Invoice JsonParser::jsonToInvoice(QJsonObject object) {
+    MyDate date = *new MyDate(object.value("date").toString());
+    Invoice invoice = *new Invoice(date);
+    invoice.fixedRateNT = object.value("fixedRateNT").toDouble();
+    invoice.fixedRateVT = object.value("fixedRateVT").toDouble();
+    invoice.variableRateNT = object.value("variableRateNT").toDouble();
+    invoice.variableRateVT = object.value("variableRateVT").toDouble();
+    return invoice;
+}
+
+QString JsonParser::createJsonInvoiceFile(QList<Invoice> invoicesList) {
+  QJsonDocument document;
+  QJsonObject rootObject;
+  for (int i = 0; i < invoicesList.length();i++) {
+      rootObject.insert(QString::number(i), JsonParser::invoiceToJson(invoicesList[i]));
+  }
+  document.setObject(rootObject);
+  return document.toJson();
+
+}
+
 User JsonParser::jsonToUser(QJsonObject object) {
     QJsonValue IDValue = object.value("ID");
     int ID = IDValue.toInt();
@@ -103,4 +135,20 @@ QList <User> JsonParser::getUsersFromJson (QString json) {
         }
 
     return users;
+}
+
+
+QList<Invoice> JsonParser::getInvoicesFromJson (QString json) {
+  QList <Invoice> invoices;
+  QJsonDocument document = QJsonDocument::fromJson(json.toUtf8());
+  QJsonObject jsonObject = document.object();
+  foreach(const QString& key, jsonObject.keys()) {
+          QJsonValue value = jsonObject[key];
+          QJsonObject object = value.toObject();
+          Invoice invoice = jsonToInvoice(object);
+
+          invoices.append(invoice);
+      }
+
+  return invoices;
 }

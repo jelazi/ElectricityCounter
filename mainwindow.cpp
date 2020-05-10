@@ -7,6 +7,10 @@
 #include "addnewentry.h"
 
 #include "usermanager.h"
+#include "choicedate.h"
+#include "invoicemanager.h"
+
+
 QTableView *userTableMain;
 QList <QString> dates;
 
@@ -14,13 +18,9 @@ QList <QString> dates;
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     this->setWindowTitle("Počítání elektřiny");
-    QDateEdit *dateEdit = ui->dateEdit;
 
-    QDate now = QDate::currentDate();
-    dateEdit->setDate(now);
-    QDate date = ui->dateEdit->date();
-    QString dateString = date.toString();
     QList <User> users = UserManager::getInstance()->getUsers();
+    QList <Invoice> invoices = InvoiceManager::getInstance()->getInvoices();
     userTableMain = ui->userTable;
     createUserTable();
 }
@@ -143,4 +143,10 @@ void MainWindow::on_btnAddEntry_clicked() {
     else {
         createUserTable();
     }
+}
+
+void MainWindow::on_addInvoice_clicked() {
+    choiceDate choiceD;
+    choiceD.setModal(true);
+    int result = choiceD.exec();
 }

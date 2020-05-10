@@ -174,3 +174,7 @@ bool User::isCorrectNewSum(TypeEntry typeEntry, double newSum) {
     int beforeSum = getSummary(typeEntry);
     return (beforeSum <=newSum);
 }
+
+QString User::getName() {
+  return name;
+}

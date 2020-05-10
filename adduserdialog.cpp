@@ -23,7 +23,7 @@ AddUserDialog::AddUserDialog(QWidget *parent) :
     nameLineEdit = ui->nameLineEdit;
     numberLineEditNT = ui->spinNT;
     numberLineEditVT = ui->spinVT;
-    MyDate now = MyDate::getNowDate();
+    MyDate now = MyDate::getCurrentDate();
     entryNT.date = now;
     entryVT.date = now;
     entryNT.type = TypeEntry::realNT;

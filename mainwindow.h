@@ -24,7 +24,9 @@ private slots:
     void on_btnAddEntry_clicked();
 
 
-private:
+    void on_addInvoice_clicked();
+
+  private:
     Ui::MainWindow *ui;
     void createUserTable();
     void reloadUserTable();

@@ -9,6 +9,7 @@
 
 class MyDate {
 public:
+    MyDate();
     MyDate(int month, int year);
     MyDate (QString nameDate);
     QString toStringWithName();
@@ -16,7 +17,8 @@ public:
     QString getNameMonth ();
     int getMonth ();
     int getYear ();
-    static MyDate getNowDate();
+    static MyDate getCurrentDate();
+    static QList<QString> getListNameMonths();
     QJsonObject toJson();
     bool isSameDate(MyDate anotherDate);
 

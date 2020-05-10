@@ -24,6 +24,7 @@ public:
     QList <Entry> getAllEntries();
     double getSummary (TypeEntry typeEntry);
     bool isCorrectNewSum (TypeEntry typeEntry, double newSum);
+    QString getName();
 
 private:
     int id;

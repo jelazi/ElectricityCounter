@@ -17,33 +17,46 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     addnewentry.cpp \
+    addnewinvoice.cpp \
     adduserdialog.cpp \
+    choicedate.cpp \
     editusers.cpp \
     filemanager.cpp \
+    invoice.cpp \
+    invoicemanager.cpp \
     jsonparser.cpp \
     main.cpp \
     mainwindow.cpp \
     mydate.cpp \
+    showmonth.cpp \
     user.cpp \
     usermanager.cpp
 
 HEADERS += \
     addnewentry.h \
+    addnewinvoice.h \
     adduserdialog.h \
+    choicedate.h \
     editusers.h \
     filemanager.h \
+    invoice.h \
+    invoicemanager.h \
     jsonparser.h \
     mainwindow.h \
     mydate.h \
+    showmonth.h \
     structures.h \
     user.h \
     usermanager.h
 
 FORMS += \
     addnewentry.ui \
+    addnewinvoice.ui \
     adduserdialog.ui \
+    choicedate.ui \
     editusers.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    showmonth.ui
 
 TRANSLATIONS += \
     untitled_cs_CZ.ts

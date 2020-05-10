@@ -50,7 +50,7 @@ bool UserManager::removeUser(int ID) {
 
 void UserManager::setDefaultUser() {
     Entry entryVT;
-    MyDate now = MyDate::getNowDate();
+    MyDate now = MyDate::getCurrentDate();
     entryVT.date = now;
     entryVT.type = TypeEntry::realVT;
     entryVT.value = 0;

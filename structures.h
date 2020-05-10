@@ -24,7 +24,7 @@ enum TypeMessageError {
 struct Entry {
     double value;
     TypeEntry type;
-    MyDate date = MyDate::getNowDate();
+    MyDate date = MyDate::getCurrentDate();
     QString user;
     void setDate(MyDate newDate) {
       date = newDate;
