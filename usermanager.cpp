@@ -197,4 +197,12 @@ void UserManager::updateUser(User user) {
     }
 }
 
+double UserManager::getEntry(User user, MyDate date, TypeEntry typeEntry) {
+  User *choiceUser = getUserByName(user.getName());
+  //if (typeEntry == TypeEntry::)
+
+  qDebug()<<"no entry in user";
+  return 0;
+}
+
 

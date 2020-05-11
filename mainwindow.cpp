@@ -148,5 +148,14 @@ void MainWindow::on_btnAddEntry_clicked() {
 void MainWindow::on_addInvoice_clicked() {
     choiceDate choiceD;
     choiceD.setModal(true);
-    int result = choiceD.exec();
+    choiceD.setParentChoiceDate(TypeParentChoiceDate::addNewInvoice);
+    choiceD.exec();
+
+}
+
+void MainWindow::on_viewResultBtn_clicked() {
+  choiceDate choiceD;
+  choiceD.setModal(true);
+  choiceD.setParentChoiceDate(TypeParentChoiceDate::viewResult);
+  choiceD.exec();
 }

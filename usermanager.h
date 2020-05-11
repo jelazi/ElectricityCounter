@@ -22,6 +22,7 @@ public:
     double getRatioUserEntry (Entry entry);
     QList<Entry> getEntriesForCompare(Entry entry);
     void updateUser(User user);
+    double getEntry(User user,MyDate date, TypeEntry typeEntry);
 
 private:
     static UserManager* instance;

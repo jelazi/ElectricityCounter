@@ -48,6 +48,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="viewResultBtn">
+        <property name="text">
+         <string>Spočítat měsíc</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>

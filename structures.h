@@ -20,6 +20,12 @@ enum TypeMessageError {
     correct
 };
 
+enum TypeParentChoiceDate {
+  addNewInvoice,
+  viewResult,
+  addNewEntry
+};
+
 
 struct Entry {
     double value;

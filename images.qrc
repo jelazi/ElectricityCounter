@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons8-electricity-80.png</file>
+        <file>icons8-electricity-80.ico</file>
+    </qresource>
+</RCC>

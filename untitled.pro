@@ -4,6 +4,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
+RC_ICONS = icons8-electricity-80.ico
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -30,7 +32,8 @@ SOURCES += \
     mydate.cpp \
     showmonth.cpp \
     user.cpp \
-    usermanager.cpp
+    usermanager.cpp \
+    viewresult.cpp
 
 HEADERS += \
     addnewentry.h \
@@ -47,7 +50,8 @@ HEADERS += \
     showmonth.h \
     structures.h \
     user.h \
-    usermanager.h
+    usermanager.h \
+    viewresult.h
 
 FORMS += \
     addnewentry.ui \
@@ -56,7 +60,8 @@ FORMS += \
     choicedate.ui \
     editusers.ui \
     mainwindow.ui \
-    showmonth.ui
+    showmonth.ui \
+    viewresult.ui
 
 TRANSLATIONS += \
     untitled_cs_CZ.ts
@@ -65,3 +70,8 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES += \
+    images.qrc

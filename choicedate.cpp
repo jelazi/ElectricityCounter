@@ -4,11 +4,14 @@
 #include "addnewinvoice.h"
 #include "invoicemanager.h"
 #include <QMessageBox>
+#include "viewresult.h"
+
 
 QComboBox *monthComboBoxChoiceDate;
 QComboBox *yearComboBoxChoiceDate;
 QPushButton *okButtonChoiceDate;
 QPushButton *cancelButtonChoiceDate;
+TypeParentChoiceDate typeParent;
 
 
 
@@ -20,7 +23,7 @@ int selectedYear;
 
 choiceDate::choiceDate(QWidget *parent): QDialog(parent), ui(new Ui::choiceDate) {
   ui->setupUi(this);
-  this->setWindowTitle("Vyberte datum");
+
   okButtonChoiceDate = ui->okBtn;
   cancelButtonChoiceDate = ui->cancelBtn;
   monthComboBoxChoiceDate = ui->month;
@@ -52,25 +55,55 @@ void choiceDate::fillYearsList () {
     yearComboBoxChoiceDate->setCurrentIndex(1);
 }
 
+void choiceDate::setParentChoiceDate(TypeParentChoiceDate type) {
+  typeParent = type;
+  if (typeParent == TypeParentChoiceDate::addNewInvoice) {
+      this->setWindowTitle("Vyberte datum faktury");
+    }
+  if (typeParent == TypeParentChoiceDate::viewResult) {
+      this->setWindowTitle("Vyberte datum pro výpočet");
+    }
+}
+
 void choiceDate::on_cancelBtn_clicked() {
     close();
 }
 
 void choiceDate::on_okBtn_clicked() {
   MyDate *choice = new MyDate(selectedMonth, selectedYear);
-  qDebug()<<choice->toStringWithName();
-  if (InvoiceManager::getInstance()->containsInvoiceByDate(*choice)) {
-      QMessageBox msgBox;
-      msgBox.setWindowTitle("Chybná data");
-      msgBox.setText("Na toto datum je již vystavená faktura");
-      msgBox.exec();
-    } else {
-      AddNewInvoice addNewInvoice;
-      addNewInvoice.setModal(true);
-      addNewInvoice.setDate(choice);
-      int result = addNewInvoice.exec();
-        close();
+
+  if (typeParent == TypeParentChoiceDate::addNewInvoice) {
+      this->setWindowTitle("Vyberte datum faktury");
+      if (InvoiceManager::getInstance()->containsInvoiceByDate(*choice)) {
+          QMessageBox msgBox;
+          msgBox.setWindowTitle("Chybná data");
+          msgBox.setText("Na toto datum je již vystavená faktura");
+          msgBox.exec();
+        } else {
+          AddNewInvoice addNewInvoice;
+          addNewInvoice.setModal(true);
+          addNewInvoice.setDate(choice);
+          addNewInvoice.exec();
+            close();
+        }
     }
+  if (typeParent == TypeParentChoiceDate::viewResult) {
+      if (InvoiceManager::getInstance()->containsInvoiceByDate((*choice))) {
+          ViewResult viewResult;
+          viewResult.setModal(true);
+          viewResult.setDate(choice);
+          viewResult.exec();
+          close();
+
+        } else {
+          QMessageBox msgBox;
+          msgBox.setWindowTitle("Nenalezená data");
+          msgBox.setText("Na toto datum nebyla ještě vystavena faktura");
+          msgBox.exec();
+        }
+      close();
+    }
+
 }
 
 
