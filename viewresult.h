@@ -6,6 +6,8 @@
 #include "QStandardItem"
 #include "usermanager.h"
 #include "invoicemanager.h"
+#include <QFileDialog>
+
 
 namespace Ui {
   class ViewResult;

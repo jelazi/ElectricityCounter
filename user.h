@@ -21,6 +21,7 @@ public:
     QList <Entry> getAllEntries();
     double getSummary (TypeEntry typeEntry);
     bool isCorrectNewSum (TypeEntry typeEntry, double newSum);
+    bool containsEntry(MyDate date);
     QString getName();
     Entry getEntryByDate(MyDate date, TypeEntry typeEntry);
 

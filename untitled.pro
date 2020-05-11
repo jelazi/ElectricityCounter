@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,6 +30,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mydate.cpp \
+    pdfcreator.cpp \
     showmonth.cpp \
     user.cpp \
     usermanager.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     jsonparser.h \
     mainwindow.h \
     mydate.h \
+    pdfcreator.h \
     showmonth.h \
     structures.h \
     user.h \
@@ -71,7 +73,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    32px-Symbol_OK.svg.png
 
 RESOURCES += \
     images.qrc

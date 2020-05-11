@@ -129,7 +129,7 @@ User* UserManager::getUserByName(QString name) {
     return &usersList[0];
 }
 
-QList<QString> UserManager::getAllDates() {
+QList<QString> UserManager::getAllNameDates() {
     QList<QString> allDates;
     QList <Entry> entries;
     foreach (User user, usersList) {
@@ -159,6 +159,42 @@ QList<QString> UserManager::getAllDates() {
     }
     return allDates;
 }
+
+QList<MyDate> UserManager::getAllDates() {
+    QList<QString> allDatesName;
+    QList<MyDate> allDate;
+    QList <Entry> entries;
+    foreach (User user, usersList) {
+        entries.append(user.getAllEntries());
+
+        }
+    std::sort(entries.begin(), entries.end(),
+              [](Entry & a, Entry & b) -> bool
+          {
+              return a.date.isLessThan(b.date);
+          });
+
+    foreach (Entry entry, entries) {
+        QString nameDate;
+        if (entry.type == TypeEntry::realNT) {
+            nameDate = entry.date.toStringWithName();
+        }
+        if (entry.type == TypeEntry::realVT) {
+            nameDate = entry.date.toStringWithName();
+        }
+
+
+        if(!allDatesName.contains(nameDate)) {
+            allDatesName.push_back(nameDate);
+            allDatesName.push_back("% " + nameDate);
+            allDate.push_back(entry.date);
+        }
+    }
+    return allDate;
+}
+
+
+
 
 double UserManager::getRatioUserEntry(Entry entry) {
     QList <Entry> entriesCompare = getEntriesForCompare(entry);

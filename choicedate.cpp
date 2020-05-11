@@ -71,7 +71,7 @@ void choiceDate::on_cancelBtn_clicked() {
 
 void choiceDate::on_okBtn_clicked() {
   MyDate *choice = new MyDate(selectedMonth, selectedYear);
-
+close();
   if (typeParent == TypeParentChoiceDate::addNewInvoice) {
       this->setWindowTitle("Vyberte datum faktury");
       if (InvoiceManager::getInstance()->containsInvoiceByDate(*choice)) {
@@ -84,16 +84,18 @@ void choiceDate::on_okBtn_clicked() {
           addNewInvoice.setModal(true);
           addNewInvoice.setDate(choice);
           addNewInvoice.exec();
-            close();
+
         }
     }
   if (typeParent == TypeParentChoiceDate::viewResult) {
+
       if (InvoiceManager::getInstance()->containsInvoiceByDate((*choice))) {
           ViewResult viewResult;
           viewResult.setModal(true);
           viewResult.setDate(choice);
+
           viewResult.exec();
-          close();
+
 
         } else {
           QMessageBox msgBox;
@@ -101,9 +103,7 @@ void choiceDate::on_okBtn_clicked() {
           msgBox.setText("Na toto datum nebyla ještě vystavena faktura");
           msgBox.exec();
         }
-      close();
     }
-
 }
 
 

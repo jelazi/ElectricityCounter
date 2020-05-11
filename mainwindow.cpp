@@ -12,17 +12,21 @@
 
 
 QTableView *userTableMain;
+QTableView *invoiceTableMain;
 QList <QString> dates;
+QList <Invoice> invoices;
+QList <User> users;
 
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     this->setWindowTitle("Počítání elektřiny");
 
-    QList <User> users = UserManager::getInstance()->getUsers();
-    QList <Invoice> invoices = InvoiceManager::getInstance()->getInvoices();
+    users = UserManager::getInstance()->getUsers();
+    invoices = InvoiceManager::getInstance()->getInvoices();
     userTableMain = ui->userTable;
-    createUserTable();
+    invoiceTableMain = ui->invoiceTable;
+    createTables();
 }
 
 MainWindow::~MainWindow() {
@@ -30,42 +34,73 @@ MainWindow::~MainWindow() {
 }
 
 
-void MainWindow::createUserTable() {
+void MainWindow::createTables() {
 
-     userTableMain->setModel(&modelMain);
+     userTableMain->setModel(&modelMainUser);
+     invoiceTableMain->setModel(&modelMainInvoice);
      reloadUserTable();
+     reloadInvoiceTable();
      userTableMain->setSelectionBehavior(QAbstractItemView::SelectRows);
      userTableMain->setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+
+void MainWindow::reloadInvoiceTable() {
+  modelMainInvoice.clear();
+  horizontalHeaderInvoice.clear();
+  verticalHeaderInvoice.clear();
+  verticalHeaderInvoice.append("fixní částka NT");
+  verticalHeaderInvoice.append("fixní částka VT");
+  verticalHeaderInvoice.append("pohyblivá částka NT");
+  verticalHeaderInvoice.append("pohyblivá částka VT");
+  for (int i = 0; i < invoices.length();i++) {
+      Invoice invoice = invoices[i];
+      horizontalHeaderInvoice.append(invoice.date.toStringWithName());
+      ;
+      modelMainInvoice.setItem(0, i, new QStandardItem(QString::number(invoice.fixedRateNT, 'f', 2)));
+      modelMainInvoice.setItem(1, i, new QStandardItem(QString::number(invoice.fixedRateVT, 'f', 2)));
+      modelMainInvoice.setItem(2, i, new QStandardItem(QString::number(invoice.variableRateNT, 'f', 2)));
+      modelMainInvoice.setItem(3, i,new QStandardItem(QString::number(invoice.variableRateVT, 'f', 2)));
+
+    }
+  modelMainInvoice.setHorizontalHeaderLabels(horizontalHeaderInvoice);
+  modelMainInvoice.setVerticalHeaderLabels(verticalHeaderInvoice);
 }
 
 
 void MainWindow::reloadUserTable() {
     QList<User> usersList = UserManager::getInstance()->getUsers();
-    modelMain.clear();
-    horizontalHeader.clear();
-    horizontalHeader.append("Jméno");
-    horizontalHeader.append("Start NT");
-    horizontalHeader.append("Start VT");
-    dates = UserManager::getInstance()->getAllDates();
-    foreach(QString date, dates) {
-        horizontalHeader.append(date);
-    }
+    modelMainUser.clear();
+    horizontalHeaderUser.clear();
+    verticalHeaderUser.clear();
+    foreach (User user, usersList) {
+        horizontalHeaderUser.append(user.getName());
+      }
 
-    modelMain.setHorizontalHeaderLabels(horizontalHeader);
-    modelMain.setVerticalHeaderLabels(verticalHeader);
+    modelMainUser.setHorizontalHeaderLabels(horizontalHeaderUser);
 
-    for(int i = 0; i < usersList.length();i++) {
-        User user = usersList[i];
-        QStandardItem *itemUserName = new QStandardItem(QString(user.name));
-        modelMain.setItem(i, 0, itemUserName);
-        QStandardItem *itemUserInitialDesicionNT = new QStandardItem(QString::number(user.initialDesicionNT.value, 'f', 2));
-        modelMain.setItem(i, 1, itemUserInitialDesicionNT);
-        QStandardItem *itemUserInitialDesicionVT = new QStandardItem(QString::number(user.initialDesicionVT.value, 'f', 2));
-        modelMain.setItem(i, 2, itemUserInitialDesicionVT);
-        fillDataUserTable(user, i);
-    }
+    QList<MyDate> allDates = UserManager::getInstance()->getAllDates();
+
+    for(int i = 0; i < allDates.length();i++) {
+        MyDate date = allDates[i];
+        verticalHeaderUser.append(date.toStringWithName());
+        for(int j = 0; j<usersList.length(); j++) {
+            if (usersList[j].containsEntry(date)) {
+
+                QImage image("32px-Symbol_OK.svg.png");
+                QImage img = image.scaled(15, 15,Qt::KeepAspectRatio);
+                QStandardItem *item = new QStandardItem();
+                item->setData(QVariant(QPixmap::fromImage(img)), Qt::DecorationRole);
+                item->setTextAlignment(Qt::AlignCenter);
+                modelMainUser.setItem(i, j, item);
+
+              }
+          }
+      }
+
+    modelMainUser.setVerticalHeaderLabels(verticalHeaderUser);
+
+
     userTableMain->resizeRowsToContents();
-  // userTableMain->horizontalHeader()->setDefaultAlignment(QtCore.AlignHCenter | Qt.Alignment(QtCore.Qt.TextWordWrap))
     userTableMain->horizontalHeader()->setFixedHeight(100);;
     userTableMain->resizeColumnsToContents();
 
@@ -105,10 +140,10 @@ void MainWindow::fillDataUserEntry (Entry entry, int ind) {
     QString date = entry.date.toString();
 
     QStandardItem *itemValue = new QStandardItem(QString::number(entry.value, 'f', 2));
-    modelMain.setItem(ind, indexRow + dates.indexOf(nameDate), itemValue);
+    modelMainUser.setItem(ind, indexRow + dates.indexOf(nameDate), itemValue);
     double ratio = UserManager::getInstance()->getRatioUserEntry(entry);
     QStandardItem *itemRatio = new QStandardItem(QString::number(ratio, 'f', 3));
-    modelMain.setItem(ind, indexRow + dates.indexOf("% " + nameDate), itemRatio);
+    modelMainUser.setItem(ind, indexRow + dates.indexOf("% " + nameDate), itemRatio);
 
 }
 
@@ -134,10 +169,10 @@ void MainWindow::on_btnAddEntry_clicked() {
     addNewEntry.setModal(true);
     int result = addNewEntry.exec();
     if(result==QDialog::Accepted) {
-        createUserTable();
+        createTables();
     }
     else {
-        createUserTable();
+        createTables();
     }
 }
 

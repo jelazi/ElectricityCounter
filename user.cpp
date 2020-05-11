@@ -153,3 +153,15 @@ Entry User::getEntryByDate(MyDate date, TypeEntry typeEntry) {
   Entry entry;
   return entry;
 }
+
+bool User::containsEntry(MyDate date)  {
+  foreach (Entry ent, realEntriesNT) {
+      if (ent.date.isSameDate(date)) {
+          foreach (Entry entVT, realEntriesVT) {
+              if (entVT.date.isSameDate(date)) return true;
+            }
+          return false;
+        }
+    }
+  return false;
+}

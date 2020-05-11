@@ -18,7 +18,8 @@ public:
     QList<QString> getNameUsers ();
     TypeMessageError addEntries(QList<Entry> entries);
     User* getUserByName(QString name);
-    QList<QString> getAllDates();
+    QList<QString> getAllNameDates();
+    QList<MyDate> getAllDates();
     double getRatioUserEntry (Entry entry);
     QList<Entry> getEntriesForCompare(Entry entry);
     void updateUser(User user);

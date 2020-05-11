@@ -30,11 +30,15 @@ private slots:
 
   private:
     Ui::MainWindow *ui;
-    void createUserTable();
+    void createTables();
     void reloadUserTable();
-    QStandardItemModel modelMain;
-    QStringList horizontalHeader;
-    QStringList verticalHeader;
+    void reloadInvoiceTable();
+    QStandardItemModel modelMainUser;
+    QStringList horizontalHeaderUser;
+    QStringList verticalHeaderUser;
+    QStandardItemModel modelMainInvoice;
+    QStringList horizontalHeaderInvoice;
+    QStringList verticalHeaderInvoice;
     void fillDataUserTable(User user, int ind);
     void fillDataUserEntry (Entry entry, int ind);
 };

@@ -1,6 +1,6 @@
 #include "viewresult.h"
 #include "ui_viewresult.h"
-
+#include "pdfcreator.h"
 
 
 MyDate *resultDate = new MyDate();
@@ -23,6 +23,28 @@ ViewResult::ViewResult(QWidget *parent): QDialog(parent), ui(new Ui::ViewResult)
 
 void ViewResult::reloadInvoiceTable() {
   modelInvoice.clear();
+  horizontalHeaderInvoice.clear();
+  horizontalHeaderInvoice.append("NT fixní částka");
+  horizontalHeaderInvoice.append("VT fixní částka");
+  horizontalHeaderInvoice.append("NT poměrová částka");
+  horizontalHeaderInvoice.append("VT poměrová částka");
+  modelInvoice.setHorizontalHeaderLabels(horizontalHeaderInvoice);
+  modelInvoice.setVerticalHeaderLabels(verticalHeaderInvoice);
+
+  QStandardItem *itemFixedRateNT = new QStandardItem(QString::number(invoice->fixedRateNT));
+  modelInvoice.setItem(0, 0, itemFixedRateNT);
+
+  QStandardItem *itemFixedRateVT = new QStandardItem(QString::number(invoice->fixedRateVT));
+  modelInvoice.setItem(0, 1, itemFixedRateVT);
+
+  QStandardItem *itemVariableRateNT = new QStandardItem(QString::number(invoice->variableRateNT));
+  modelInvoice.setItem(0, 2, itemVariableRateNT);
+
+  QStandardItem *itemVariableRateVT = new QStandardItem(QString::number(invoice->variableRateVT));
+  modelInvoice.setItem(0, 3, itemVariableRateVT);
+
+  invoiceTable->resizeRowsToContents();
+  invoiceTable->resizeColumnsToContents();
 }
 
 void ViewResult::reloadEntriesTable() {
@@ -44,7 +66,7 @@ void ViewResult::reloadEntriesTable() {
       User user = usersList[i];
       QStandardItem *itemUserName = new QStandardItem(QString(user.name));
       modelEntries.setItem(i, 0, itemUserName);
-      modelEntries.item(i,0)->setData(QBrush(Qt::lightGray), Qt::BackgroundRole);
+      modelEntries.item(i,0)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
 
 
       QStandardItem *itemNTValue = new QStandardItem(QString::number(UserManager::getInstance()->getEntryValue(user, *resultDate, TypeEntry::realNT)));
@@ -55,7 +77,7 @@ void ViewResult::reloadEntriesTable() {
       QStandardItem *itemNTRatio = new QStandardItem(QString::number(ratioNT, 'f', 3));
       modelEntries.setItem(i, 2, itemNTRatio);
 
-      double invoiceValueNT = invoice->variableRateNT / ratioNT;
+      double invoiceValueNT = invoice->variableRateNT * ratioNT;
       QStandardItem *itemNTInvoiceValue = new QStandardItem(QString::number(invoiceValueNT, 'f', 2));
       modelEntries.setItem(i, 3, itemNTInvoiceValue);
 
@@ -75,7 +97,7 @@ double ratioVT = UserManager::getInstance()->getRatioUserEntry(user.getEntryByDa
       QStandardItem *itemVTRatio = new QStandardItem(QString::number(ratioVT, 'f', 3));
       modelEntries.setItem(i, 6, itemVTRatio);
 
-      double invoiceValueVT = invoice->variableRateVT / ratioVT;
+      double invoiceValueVT = invoice->variableRateVT * ratioVT;
       QStandardItem *itemVTInvoiceValue = new QStandardItem(QString::number(invoiceValueVT, 'f', 2));
       modelEntries.setItem(i, 7, itemVTInvoiceValue);
 
@@ -119,7 +141,9 @@ void ViewResult::on_btnCancel_clicked() {
 }
 
 void ViewResult::on_btnCreatePdf_clicked() {
-    close();
+  PDFCreator pdfCreator;
+  QString fileName = QFileDialog::getSaveFileName(this, "Uložit soubor", resultDate->toStringWithName(), ".pdf");
+ pdfCreator.createPDF(entriesTable, fileName + ".pdf", resultDate->toStringWithName());
 }
 
 void ViewResult::on_btnSendMail_clicked() {
