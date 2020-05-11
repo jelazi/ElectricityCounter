@@ -69,6 +69,7 @@ void MainWindow::reloadUserTable() {
     userTableMain->horizontalHeader()->setFixedHeight(100);;
     userTableMain->resizeColumnsToContents();
 
+
 }
 
 

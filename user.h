@@ -22,6 +22,7 @@ public:
     double getSummary (TypeEntry typeEntry);
     bool isCorrectNewSum (TypeEntry typeEntry, double newSum);
     QString getName();
+    Entry getEntryByDate(MyDate date, TypeEntry typeEntry);
 
 private:
     int id;

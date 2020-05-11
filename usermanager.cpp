@@ -166,7 +166,7 @@ double UserManager::getRatioUserEntry(Entry entry) {
     foreach (Entry entry, entriesCompare) {
         sum += entry.value;
     }
-    if (entry.value == 0) return 0;
+    if (entry.value == 0 || sum == 0) return 0;
     return entry.value / sum;
 }
 
@@ -192,10 +192,18 @@ void UserManager::updateUser(User user) {
     }
 }
 
-double UserManager::getEntry(User user, MyDate date, TypeEntry typeEntry) {
+double UserManager::getEntryValue(User user, MyDate date, TypeEntry typeEntry) {
   User *choiceUser = getUserByName(user.getName());
   if (typeEntry == TypeEntry::realNT) {
-     // foreach (Entry entry, choiceUser.)
+      foreach (Entry entry, choiceUser->getRealEntries(TypeEntry::realNT)) {
+          if (entry.date.isSameDate(date)) return entry.value;
+        }
+    }
+
+  if (typeEntry == TypeEntry::realVT) {
+      foreach (Entry entry, choiceUser->getRealEntries(TypeEntry::realVT)) {
+          if (entry.date.isSameDate(date)) return entry.value;
+        }
     }
 
   qDebug()<<"no entry in user";

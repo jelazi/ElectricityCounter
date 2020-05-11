@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "mydate.h"
 #include "QStandardItem"
+#include "usermanager.h"
+#include "invoicemanager.h"
 
 namespace Ui {
   class ViewResult;

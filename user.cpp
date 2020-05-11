@@ -137,3 +137,19 @@ bool User::isCorrectNewSum(TypeEntry typeEntry, double newSum) {
 QString User::getName() {
   return name;
 }
+
+Entry User::getEntryByDate(MyDate date, TypeEntry typeEntry) {
+  if (typeEntry == TypeEntry::realNT) {
+      foreach (Entry ent, realEntriesNT) {
+          if (ent.date.isSameDate(date)) return ent;
+        }
+    }
+  if (typeEntry == TypeEntry::realVT) {
+      foreach (Entry ent, realEntriesVT) {
+          if (ent.date.isSameDate(date)) return ent;
+        }
+    }
+  qDebug()<<"Error: entry dont find";
+  Entry entry;
+  return entry;
+}
