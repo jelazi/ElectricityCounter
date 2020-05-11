@@ -150,12 +150,7 @@ QList<QString> UserManager::getAllDates() {
         if (entry.type == TypeEntry::realVT) {
             nameDate = "Sk VT: " + entry.date.toStringWithName();
         }
-        if (entry.type == TypeEntry::invoiceNT) {
-            nameDate = "Fa NT: " + entry.date.toStringWithName();
-        }
-        if (entry.type == TypeEntry::invoiceVT) {
-            nameDate = "Fa VT: " + entry.date.toStringWithName();
-        }
+
 
         if(!allDates.contains(nameDate)) {
             allDates.push_back(nameDate);
@@ -199,7 +194,9 @@ void UserManager::updateUser(User user) {
 
 double UserManager::getEntry(User user, MyDate date, TypeEntry typeEntry) {
   User *choiceUser = getUserByName(user.getName());
-  //if (typeEntry == TypeEntry::)
+  if (typeEntry == TypeEntry::realNT) {
+     // foreach (Entry entry, choiceUser.)
+    }
 
   qDebug()<<"no entry in user";
   return 0;

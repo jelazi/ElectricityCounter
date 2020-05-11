@@ -100,12 +100,7 @@ void MainWindow::fillDataUserEntry (Entry entry, int ind) {
     if (entry.type == TypeEntry::realVT) {
         nameDate = "Sk VT: " + entry.date.toStringWithName();
     }
-    if (entry.type == TypeEntry::invoiceNT) {
-        nameDate = "Fa NT: " + entry.date.toStringWithName();
-    }
-    if (entry.type == TypeEntry::invoiceVT) {
-        nameDate = "Fa VT: " + entry.date.toStringWithName();
-    }
+
     QString date = entry.date.toString();
 
     QStandardItem *itemValue = new QStandardItem(QString::number(entry.value, 'f', 2));

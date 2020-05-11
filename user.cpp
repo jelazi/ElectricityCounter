@@ -26,13 +26,7 @@ QList<Entry> User::getRealEntries(TypeEntry typeEntry) {
     }
 }
 
-QList<Entry> User::getInvoiceEntries(TypeEntry typeEntry) {
-    if (typeEntry == TypeEntry::invoiceNT) {
-        return realEntriesNT;
-    } else {
-        return realEntriesVT;
-    }
-}
+
 
 TypeMessageError User::addEntry(Entry entry) {
     if (entry.type == TypeEntry::realNT) {
@@ -53,24 +47,7 @@ TypeMessageError User::addEntry(Entry entry) {
             return TypeMessageError::sameDate;
         }
     }
-    if (entry.type == TypeEntry::invoiceNT) {
-        if (!isSameDateEntry(entry)) {
-            invoiceEntriesNT.append(entry);
-            return TypeMessageError::correct;
-        } else {
-            qDebug() << "error: same date Entry";
-            return TypeMessageError::sameDate;
-        }
-    }
-    if (entry.type == TypeEntry::invoiceVT) {
-        if (!isSameDateEntry(entry)) {
-            invoiceEntriesVT.append(entry);
-            return TypeMessageError::correct;
-        } else {
-            qDebug() << "error: same date Entry";
-            return TypeMessageError::sameDate;
-        }
-    }
+
     return TypeMessageError::anotherError;
 }
 
@@ -106,12 +83,7 @@ bool User::isSameDateEntry(Entry inputEntry) {
     if (inputEntry.type == TypeEntry::realVT) {
         entries = this->realEntriesVT;
     }
-    if (inputEntry.type == TypeEntry::invoiceNT) {
-        entries = this->invoiceEntriesNT;
-    }
-    if (inputEntry.type == TypeEntry::invoiceVT) {
-        entries = this->invoiceEntriesVT;
-    }
+
 
     foreach (Entry ent, entries) {
         if (ent.date.compareDates(inputEntry.date) == 0) return true;
@@ -125,8 +97,6 @@ QList <Entry> User::getAllEntries () {
     QList <Entry> entries;
     entries.append(realEntriesNT);
     entries.append(realEntriesVT);
-    entries.append(invoiceEntriesNT);
-    entries.append(invoiceEntriesVT);
 
    std::sort(entries.begin(), entries.end(),
              [](Entry & a, Entry & b) -> bool
@@ -154,18 +124,7 @@ double User::getSummary(TypeEntry typeEntry) {
         }
             break;
         }
-    case TypeEntry::invoiceNT : {
-        foreach (Entry entry, invoiceEntriesNT) {
-            sum += entry.value;
-        }
-            break;
-        }
-    case TypeEntry::invoiceVT : {
-        foreach (Entry entry, invoiceEntriesVT) {
-            sum += entry.value;
-        }
-            break;
-        }
+
     }
     return sum;
 }

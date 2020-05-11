@@ -6,9 +6,7 @@
 
 enum TypeEntry {
     realVT,
-    realNT,
-    invoiceVT,
-    invoiceNT
+    realNT
 };
 
 

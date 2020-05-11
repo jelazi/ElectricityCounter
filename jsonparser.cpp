@@ -22,10 +22,7 @@ QJsonObject JsonParser::userToJson(User user) {
     object["realEntriesVT"] = realEntriesVT;
     QJsonArray realEntriesNT = User::entriesToJson(user.realEntriesNT);
     object["realEntriesNT"] = realEntriesNT;
-    QJsonArray invoiceEntriesVT = User::entriesToJson(user.invoiceEntriesVT);
-    object["invoiceEntriesVT"] = invoiceEntriesVT;
-    QJsonArray invoiceEntriesNT = User::entriesToJson(user.invoiceEntriesNT);
-    object["invoiceEntriesNT"] = invoiceEntriesNT;
+
     return object;
 }
 
@@ -96,13 +93,7 @@ User JsonParser::jsonToUser(QJsonObject object) {
     QJsonArray arrayRealEntriesVT = arrayRealEntriesVTValue.toArray();
     user->realEntriesVT = User::entriesFromJson(arrayRealEntriesVT);
 
-    QJsonValue arrayInvoiceEntriesNTValue = object.value("invoiceEntriesNT");
-    QJsonValue arrayInvoiceEntriesVTValue = object.value("invoiceEntriesVT");
 
-    QJsonArray arrayInvoiceEntriesNT = arrayInvoiceEntriesNTValue.toArray();
-    user->invoiceEntriesNT = User::entriesFromJson(arrayInvoiceEntriesNT);
-    QJsonArray arrayInvoiceEntriesVT = arrayInvoiceEntriesVTValue.toArray();
-    user->invoiceEntriesVT = User::entriesFromJson(arrayInvoiceEntriesVT);
     return *user;
 }
 
