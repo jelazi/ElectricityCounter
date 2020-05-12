@@ -180,7 +180,13 @@ void MainWindow::on_addInvoice_clicked() {
     choiceDate choiceD;
     choiceD.setModal(true);
     choiceD.setParentChoiceDate(TypeParentChoiceDate::addNewInvoice);
-    choiceD.exec();
+    int result = choiceD.exec();
+    if(result==QDialog::Accepted) {
+        createTables();
+    }
+    else {
+        createTables();
+    }
 
 }
 

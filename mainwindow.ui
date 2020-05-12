@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1031</width>
-    <height>629</height>
+    <width>1088</width>
+    <height>666</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,36 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Měření</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QTableView" name="userTable"/>
+      </item>
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Faktury</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QTableView" name="invoiceTable"/>
