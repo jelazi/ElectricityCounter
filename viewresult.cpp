@@ -25,7 +25,7 @@ ViewResult::ViewResult(QWidget *parent): QDialog(parent), ui(new Ui::ViewResult)
 void ViewResult::reloadInvoiceTable() {
   modelInvoice.clear();
   horizontalHeaderInvoice.clear();
-  horizontalHeaderInvoice.append("fixní částka");
+  horizontalHeaderInvoice.append("pevná částka");
   horizontalHeaderInvoice.append("NT poměrová částka");
   horizontalHeaderInvoice.append("VT poměrová částka");
   modelInvoice.setHorizontalHeaderLabels(horizontalHeaderInvoice);
@@ -59,6 +59,17 @@ void ViewResult::reloadEntriesTable() {
   horizontalHeaderEntries.append("Poměr VT a NT");
   modelEntries.setHorizontalHeaderLabels(horizontalHeaderEntries);
   modelEntries.setVerticalHeaderLabels(verticalHeaderEntries);
+
+  double sumNTValue = 0;
+  double sumVTValue = 0;
+  double sumNTRatio = 0;
+  double sumVTRatio = 0;
+  double sumNTInvoice = 0;
+  double sumVTInvoice = 0;
+  double sumFixed = 0;
+  double sumSum = 0;
+
+
   for(int i = 0; i < usersList.length();i++) {
       User user = usersList[i];
       QStandardItem *itemUserName = new QStandardItem(QString(user.name));
@@ -69,12 +80,15 @@ void ViewResult::reloadEntriesTable() {
       QStandardItem *itemNTValue = new QStandardItem(QString::number(UserManager::getInstance()->getEntryValue(user, *resultDate, TypeEntry::realNT))+ " kWh");
       modelEntries.setItem(i, 1, itemNTValue);
 
+
       double ratioNT = UserManager::getInstance()->getRatioUserEntry(user.getEntryByDate(*resultDate, TypeEntry::realNT));
+      sumNTRatio +=ratioNT;
 
       QStandardItem *itemNTRatio = new QStandardItem(QString::number(ratioNT * 100, 'f', 1) + " %");
       modelEntries.setItem(i, 2, itemNTRatio);
 
       double invoiceValueNT = invoice->variableRateNT * ratioNT;
+      sumNTInvoice +=invoiceValueNT;
       QStandardItem *itemNTInvoiceValue = new QStandardItem(QString::number(invoiceValueNT, 'f', 2) + " Kč");
       modelEntries.setItem(i, 3, itemNTInvoiceValue);
 
@@ -84,29 +98,37 @@ void ViewResult::reloadEntriesTable() {
       modelEntries.setItem(i, 4, itemVTValue);
 
 double ratioVT = UserManager::getInstance()->getRatioUserEntry(user.getEntryByDate(*resultDate, TypeEntry::realVT));
-
+        sumVTRatio +=ratioVT;
       QStandardItem *itemVTRatio = new QStandardItem(QString::number(ratioVT * 100, 'f', 1) + " %");
       modelEntries.setItem(i, 5, itemVTRatio);
 
       double invoiceValueVT = invoice->variableRateVT * ratioVT;
+      sumVTInvoice +=invoiceValueVT;
       QStandardItem *itemVTInvoiceValue = new QStandardItem(QString::number(invoiceValueVT, 'f', 2) + " Kč");
       modelEntries.setItem(i, 6, itemVTInvoiceValue);
 
       double invoiceValueFixed = invoice->fixedRate / usersList.length();
+      sumFixed += invoiceValueFixed;
       QStandardItem *itemInvoiceValueFixed = new QStandardItem(QString::number(invoiceValueFixed, 'f', 2) + " Kč");
       modelEntries.setItem(i, 7, itemInvoiceValueFixed);
 
 
       double sum = invoiceValueNT + invoiceValueVT +  invoiceValueFixed;
+      sumSum += sum;
       QStandardItem *itemSum = new QStandardItem(QString::number(sum, 'f', 2) + " Kč");
       modelEntries.setItem(i, 8, itemSum);
 
-      double percent = ((invoiceValueNT + invoiceValueVT) / 100);
+      double nt = (UserManager::getInstance()->getEntryValue(user, *resultDate, TypeEntry::realNT));
+      sumNTValue += nt;
+      double vt = (UserManager::getInstance()->getEntryValue(user, *resultDate, TypeEntry::realVT));
+      sumVTValue += vt;
+
+      double percent = ((nt + vt) / 100);
       double ratioNTVT = 0;
       double ratioVTNT = 0;
       if (percent != 0) {
-          ratioNTVT = invoiceValueNT / percent;
-          ratioVTNT = invoiceValueVT / percent;
+          ratioNTVT = nt / percent;
+          ratioVTNT = vt / percent;
       }
 
 
@@ -121,6 +143,36 @@ modelEntries.item(i,8)->setData(QBrush((QColor(151, 245, 16))), Qt::BackgroundRo
 entriesTable->resizeRowsToContents();
 entriesTable->resizeColumnsToContents();
     }
+
+  int lastRow = usersList.length();
+
+  QStandardItem *lbl = new QStandardItem("Součty");
+  modelEntries.setItem(lastRow, 0, lbl);
+
+  QStandardItem *sumNTValueItem = new QStandardItem(QString::number(sumNTValue, 'f', 2) + " kWh");
+  modelEntries.setItem(lastRow, 1, sumNTValueItem);
+  QStandardItem *sumVTValueItem = new QStandardItem(QString::number(sumVTValue, 'f', 2) + " kWh");
+  modelEntries.setItem(lastRow, 4, sumVTValueItem);
+  QStandardItem *sumNTRatioItem = new QStandardItem(QString::number(sumNTRatio * 100, 'f', 1) + " %");
+  modelEntries.setItem(lastRow, 2, sumNTRatioItem);
+  QStandardItem *sumVTRatioItem = new QStandardItem(QString::number(sumVTRatio * 100, 'f', 1) + " %");
+  modelEntries.setItem(lastRow, 5, sumVTRatioItem);
+  QStandardItem *sumNTInvoiceItem = new QStandardItem(QString::number(sumNTInvoice, 'f', 2) + " Kč");
+  modelEntries.setItem(lastRow, 3, sumNTInvoiceItem);
+  QStandardItem *sumVTInvoiceItem = new QStandardItem(QString::number(sumVTInvoice, 'f', 2) + " Kč");
+  modelEntries.setItem(lastRow, 6, sumVTInvoiceItem);
+  QStandardItem *sumFixedItem = new QStandardItem(QString::number(sumFixed, 'f', 2) + " Kč");
+  modelEntries.setItem(lastRow, 7, sumFixedItem);
+  QStandardItem *sumSumItem = new QStandardItem(QString::number(sumSum, 'f', 2) + " Kč");
+  modelEntries.setItem(lastRow, 8, sumSumItem);
+
+  for (int i = 1; i<9;i++) {
+      modelEntries.item(lastRow,i)->setData(QBrush((QColor(39, 226, 232))), Qt::BackgroundRole);
+  }
+
+
+
+
 }
 
 ViewResult::~ViewResult() {
