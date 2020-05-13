@@ -7,8 +7,7 @@
 
 QLabel *dateLabel;
 QVBoxLayout * dataLayout;
-QDoubleSpinBox *fixedRateSpinBoxNT;
-QDoubleSpinBox *fixedRateSpinBoxVT;
+QDoubleSpinBox *fixedRateSpinBox;
 QDoubleSpinBox *flexibleRateSpinBoxNT;
 QDoubleSpinBox *flexibleRateSpinBoxVT;
 
@@ -42,31 +41,29 @@ void AddNewInvoice::addItems() {
   usersLbl->setText(usersString);
   dataLayout->addWidget(usersLbl);
 
+  QLabel *coinLblFlex = new QLabel();
+  coinLblFlex->setText("Kč");
+  QLabel *coinLblVarVT = new QLabel();
+  coinLblVarVT->setText("Kč");
+  QLabel *coinLblVarNT = new QLabel();
+  coinLblVarNT->setText("Kč");
+
+
 
   QHBoxLayout *fixedlayoutNT = new QHBoxLayout();
   QLabel *fixedRateLblNT = new QLabel();
-  fixedRateLblNT->setText("Pevná sazba NT");
+  fixedRateLblNT->setText("Pevná sazba");
   fixedlayoutNT->addWidget(fixedRateLblNT);
 
-  fixedRateSpinBoxNT = new QDoubleSpinBox();
-  fixedRateSpinBoxNT->setValue(0);
-  fixedRateSpinBoxNT->setRange(0, 9999999);
-  fixedlayoutNT->addWidget(fixedRateSpinBoxNT);
+  fixedRateSpinBox = new QDoubleSpinBox();
+  fixedRateSpinBox->setValue(0);
+  fixedRateSpinBox->setRange(0, 9999999);
 
+
+  fixedlayoutNT->addWidget(fixedRateSpinBox);
+fixedlayoutNT->addWidget(coinLblFlex);
   dataLayout->addLayout(fixedlayoutNT);
 
-
-  QHBoxLayout *fixedlayoutVT = new QHBoxLayout();
-  QLabel *fixedRateLblVT = new QLabel();
-  fixedRateLblVT->setText("Pevná sazba VT");
-  fixedlayoutVT->addWidget(fixedRateLblVT);
-
-  fixedRateSpinBoxVT = new QDoubleSpinBox();
-  fixedRateSpinBoxVT->setValue(0);
-  fixedRateSpinBoxVT->setRange(0, 9999999);
-  fixedlayoutVT->addWidget(fixedRateSpinBoxVT);
-
-  dataLayout->addLayout(fixedlayoutVT);
 
 
   QHBoxLayout *flexiblelayoutNT = new QHBoxLayout();
@@ -79,6 +76,8 @@ void AddNewInvoice::addItems() {
   flexibleRateSpinBoxNT->setRange(0, 9999999);
   flexiblelayoutNT->addWidget(flexibleRateSpinBoxNT);
 
+  flexiblelayoutNT->addWidget(coinLblVarNT);
+
   dataLayout->addLayout(flexiblelayoutNT);
 
   QHBoxLayout *flexiblelayoutVT = new QHBoxLayout();
@@ -89,7 +88,10 @@ void AddNewInvoice::addItems() {
   flexibleRateSpinBoxVT = new QDoubleSpinBox();
   flexibleRateSpinBoxVT->setValue(0);
   flexibleRateSpinBoxVT->setRange(0, 9999999);
+
   flexiblelayoutVT->addWidget(flexibleRateSpinBoxVT);
+
+  flexiblelayoutVT->addWidget(coinLblVarVT);
 
   dataLayout->addLayout(flexiblelayoutVT);
 
@@ -116,8 +118,7 @@ void AddNewInvoice::on_okBtn_clicked() {
   msgBox.exec();
   if (msgBox.clickedButton() == okButton) {
       Invoice *newInvoice = new Invoice (currentDate);
-      newInvoice->fixedRateNT = fixedRateSpinBoxNT->value();
-      newInvoice->fixedRateVT = fixedRateSpinBoxVT->value();
+      newInvoice->fixedRate = fixedRateSpinBox->value();
       newInvoice->variableRateNT = flexibleRateSpinBoxNT->value();
       newInvoice->variableRateVT = flexibleRateSpinBoxVT->value();
       InvoiceManager::getInstance()->addInvoice(*newInvoice);

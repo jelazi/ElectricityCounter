@@ -49,18 +49,16 @@ void MainWindow::reloadInvoiceTable() {
   modelMainInvoice.clear();
   horizontalHeaderInvoice.clear();
   verticalHeaderInvoice.clear();
-  verticalHeaderInvoice.append("fixní částka NT");
-  verticalHeaderInvoice.append("fixní částka VT");
+  verticalHeaderInvoice.append("fixní částka");
   verticalHeaderInvoice.append("pohyblivá částka NT");
   verticalHeaderInvoice.append("pohyblivá částka VT");
   for (int i = 0; i < invoices.length();i++) {
       Invoice invoice = invoices[i];
       horizontalHeaderInvoice.append(invoice.date.toStringWithName());
       ;
-      modelMainInvoice.setItem(0, i, new QStandardItem(QString::number(invoice.fixedRateNT, 'f', 2)));
-      modelMainInvoice.setItem(1, i, new QStandardItem(QString::number(invoice.fixedRateVT, 'f', 2)));
-      modelMainInvoice.setItem(2, i, new QStandardItem(QString::number(invoice.variableRateNT, 'f', 2)));
-      modelMainInvoice.setItem(3, i,new QStandardItem(QString::number(invoice.variableRateVT, 'f', 2)));
+      modelMainInvoice.setItem(0, i, new QStandardItem(QString::number(invoice.fixedRate, 'f', 2) + " Kč"));
+      modelMainInvoice.setItem(1, i, new QStandardItem(QString::number(invoice.variableRateNT, 'f', 2) + " Kč"));
+      modelMainInvoice.setItem(2, i,new QStandardItem(QString::number(invoice.variableRateVT, 'f', 2) + " Kč"));
 
     }
   modelMainInvoice.setHorizontalHeaderLabels(horizontalHeaderInvoice);

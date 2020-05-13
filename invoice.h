@@ -7,8 +7,7 @@ class Invoice {
   public:
 
     Invoice(MyDate dateRef);
-    double fixedRateNT;
-    double fixedRateVT;
+    double fixedRate;
     double variableRateNT;
     double variableRateVT;
     MyDate date;

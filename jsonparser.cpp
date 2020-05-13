@@ -29,8 +29,7 @@ QJsonObject JsonParser::userToJson(User user) {
 
 QJsonObject JsonParser::invoiceToJson(Invoice invoice) {
     QJsonObject object;
-     object["fixedRateNT"] = invoice.fixedRateNT;
-     object["fixedRateVT"] = invoice.fixedRateVT;
+     object["fixedRate"] = invoice.fixedRate;
      object["variableRateNT"] = invoice.variableRateNT;
      object["variableRateVT"] = invoice.variableRateVT;
       object["date"] = invoice.date.toString();
@@ -40,8 +39,7 @@ QJsonObject JsonParser::invoiceToJson(Invoice invoice) {
 Invoice JsonParser::jsonToInvoice(QJsonObject object) {
     MyDate date = *new MyDate(object.value("date").toString());
     Invoice invoice = *new Invoice(date);
-    invoice.fixedRateNT = object.value("fixedRateNT").toDouble();
-    invoice.fixedRateVT = object.value("fixedRateVT").toDouble();
+    invoice.fixedRate = object.value("fixedRate").toDouble();
     invoice.variableRateNT = object.value("variableRateNT").toDouble();
     invoice.variableRateVT = object.value("variableRateVT").toDouble();
     return invoice;

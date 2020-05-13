@@ -66,7 +66,8 @@ void AddNewEntry::fillUsers() {
         layout->addWidget(name);
         layout->addStretch();
         QLabel *labelNT = new QLabel;
-        labelNT->setText("NT: ");
+        labelNT->setText("      NT: ");
+        labelNT->setStyleSheet("font-weight: bold; color: red");
         layout->addWidget(labelNT);
         double sumNTValue = user.getSummary(TypeEntry::realNT);
         QLabel *sumNT = new QLabel;
@@ -74,11 +75,17 @@ void AddNewEntry::fillUsers() {
         layout->addWidget(sumNT);
         QDoubleSpinBox *spinBoxNT = new QDoubleSpinBox;
         spinBoxNT->setObjectName(user.name + "_spinBoxNT");
-        spinBoxNT->setValue(sumNTValue);
         spinBoxNT->setRange(0, 9999999);
+        spinBoxNT->setValue(sumNTValue);
+
         layout->addWidget(spinBoxNT);
+        QLabel *coinLblNT = new QLabel();
+        coinLblNT->setText("kWh");
+        layout->addWidget(coinLblNT);
+
         QLabel *labelVT = new QLabel;
-        labelVT->setText("VT: ");
+        labelVT->setText("      VT: ");
+        labelVT->setStyleSheet("font-weight: bold; color: red");
         layout->addWidget(labelVT);
         double sumVTValue = user.getSummary(TypeEntry::realVT);
         QLabel *sumVT = new QLabel;
@@ -89,6 +96,9 @@ void AddNewEntry::fillUsers() {
         spinBoxVT->setRange(0, 9999999);
         spinBoxVT->setValue(sumVTValue);
         layout->addWidget(spinBoxVT);
+        QLabel *coinLblVT = new QLabel();
+        coinLblVT->setText("kWh");
+        layout->addWidget(coinLblVT);
         usersLayout->addLayout(layout);
     }
 }
