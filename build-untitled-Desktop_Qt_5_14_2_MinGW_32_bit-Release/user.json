@@ -1,0 +1,66 @@
+{
+    "0": {
+        "ID": 1,
+        "initialDesicionNT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "initialDesicionVT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "name": "Matìjkovi",
+        "realEntriesNT": [
+        ],
+        "realEntriesVT": [
+        ]
+    },
+    "1": {
+        "ID": 2,
+        "initialDesicionNT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "initialDesicionVT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "name": "Èinèalovi",
+        "realEntriesNT": [
+        ],
+        "realEntriesVT": [
+        ]
+    },
+    "2": {
+        "ID": 3,
+        "initialDesicionNT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "initialDesicionVT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "name": "Žižkovi",
+        "realEntriesNT": [
+        ],
+        "realEntriesVT": [
+        ]
+    },
+    "3": {
+        "ID": 4,
+        "initialDesicionNT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "initialDesicionVT": {
+            "date": "5, 2020",
+            "value": 0
+        },
+        "name": "Èapkovi",
+        "realEntriesNT": [
+        ],
+        "realEntriesVT": [
+        ]
+    }
+}

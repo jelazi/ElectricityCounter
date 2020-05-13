@@ -24,10 +24,17 @@ class choiceDate : public QDialog {
     void on_month_currentIndexChanged(int index);
 
     void on_year_currentIndexChanged(int index);
+    void slotChangeData();
+
+
+signals:
+    void signalChangeData();
 
   private:
     Ui::choiceDate *ui;
     void fillYearsList ();
+
+
 };
 
 #endif // CHOICEDATE_H

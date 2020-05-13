@@ -28,6 +28,8 @@ private slots:
 
     void on_viewResultBtn_clicked();
 
+    void slotChangeData();
+
   private:
     Ui::MainWindow *ui;
     void createTables();

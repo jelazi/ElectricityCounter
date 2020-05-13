@@ -27,6 +27,11 @@ private slots:
 
     void on_yearComboBox_currentIndexChanged(int index);
 
+
+signals:
+
+    void signalChangeData();
+
 private:
     Ui::AddNewEntry *ui;
     void fillYearsList();

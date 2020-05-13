@@ -157,6 +157,7 @@ void AddNewEntry::on_okButton_clicked() {
     TypeMessageError typeMessage = UserManager::getInstance()->addEntries(entries);
     if (typeMessage == TypeMessageError::correct) {
         UserManager::getInstance()->saveCurrentUsersToJson();
+        signalChangeData();
         close();
     } else {
         QMessageBox msgBox;

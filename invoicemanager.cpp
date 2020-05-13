@@ -43,7 +43,6 @@ Invoice* InvoiceManager::getInvoiceByDate(MyDate date) {
 
 void InvoiceManager::addInvoice(Invoice invoice) {
   invoicesList.push_back(invoice);
-  qDebug()<<invoice.date.toString();
   saveCurrentInvoiceToJson();
 }
 

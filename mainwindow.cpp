@@ -45,6 +45,7 @@ void MainWindow::createTables() {
 }
 
 void MainWindow::reloadInvoiceTable() {
+    invoices = InvoiceManager::getInstance()->getInvoices();
   modelMainInvoice.clear();
   horizontalHeaderInvoice.clear();
   verticalHeaderInvoice.clear();
@@ -68,11 +69,11 @@ void MainWindow::reloadInvoiceTable() {
 
 
 void MainWindow::reloadUserTable() {
-    QList<User> usersList = UserManager::getInstance()->getUsers();
+    users = UserManager::getInstance()->getUsers();
     modelMainUser.clear();
     horizontalHeaderUser.clear();
     verticalHeaderUser.clear();
-    foreach (User user, usersList) {
+    foreach (User user, users) {
         horizontalHeaderUser.append(user.getName());
       }
 
@@ -83,8 +84,8 @@ void MainWindow::reloadUserTable() {
     for(int i = 0; i < allDates.length();i++) {
         MyDate date = allDates[i];
         verticalHeaderUser.append(date.toStringWithName());
-        for(int j = 0; j<usersList.length(); j++) {
-            if (usersList[j].containsEntry(date)) {
+        for(int j = 0; j<users.length(); j++) {
+            if (users[j].containsEntry(date)) {
 
                 QImage image("32px-Symbol_OK.svg.png");
                 QImage img = image.scaled(15, 15,Qt::KeepAspectRatio);
@@ -167,32 +168,27 @@ void MainWindow::on_editUserBtn_clicked() {
 void MainWindow::on_btnAddEntry_clicked() {
     AddNewEntry addNewEntry;
     addNewEntry.setModal(true);
-    int result = addNewEntry.exec();
-    if(result==QDialog::Accepted) {
-        createTables();
-    }
-    else {
-        createTables();
-    }
+    QObject::connect(&addNewEntry, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
+    addNewEntry.exec();
+
 }
 
 void MainWindow::on_addInvoice_clicked() {
     choiceDate choiceD;
     choiceD.setModal(true);
     choiceD.setParentChoiceDate(TypeParentChoiceDate::addNewInvoice);
-    int result = choiceD.exec();
-    if(result==QDialog::Accepted) {
-        createTables();
+    QObject::connect(&choiceD, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
+    choiceD.exec();
     }
-    else {
-        createTables();
-    }
-
-}
 
 void MainWindow::on_viewResultBtn_clicked() {
   choiceDate choiceD;
   choiceD.setModal(true);
   choiceD.setParentChoiceDate(TypeParentChoiceDate::viewResult);
   choiceD.exec();
+}
+
+void MainWindow::slotChangeData() {
+    reloadUserTable();
+    reloadInvoiceTable();
 }

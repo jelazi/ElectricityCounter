@@ -122,6 +122,9 @@ void AddNewInvoice::on_okBtn_clicked() {
       newInvoice->variableRateVT = flexibleRateSpinBoxVT->value();
       InvoiceManager::getInstance()->addInvoice(*newInvoice);
     close();
+    signalChangeData();
     }
+
+
 
 }

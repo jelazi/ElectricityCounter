@@ -21,6 +21,7 @@ class ViewResult : public QDialog {
     ~ViewResult();
     void setDate (MyDate *myDate);
 
+
   private slots:
 
 

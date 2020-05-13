@@ -143,7 +143,11 @@ void ViewResult::on_btnCancel_clicked() {
 void ViewResult::on_btnCreatePdf_clicked() {
   PDFCreator pdfCreator;
   QString fileName = QFileDialog::getSaveFileName(this, "Uložit soubor", resultDate->toStringWithName(), ".pdf");
- pdfCreator.createPDF(entriesTable, fileName + ".pdf", resultDate->toStringWithName());
+  pdfCreator.addPath(fileName + ".pdf");
+  pdfCreator.addTitle(resultDate->toStringWithName());
+  pdfCreator.addTable(entriesTable, "Měření");
+  pdfCreator.addTable(invoiceTable, "Faktura");
+  pdfCreator.createPDF();
 }
 
 void ViewResult::on_btnSendMail_clicked() {

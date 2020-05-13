@@ -24,6 +24,9 @@ class AddNewInvoice : public QDialog
 
     void on_okBtn_clicked();
 
+signals:
+    void signalChangeData();
+
   private:
     Ui::AddNewInvoice *ui;
     void addItems();

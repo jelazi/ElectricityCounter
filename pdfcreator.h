@@ -12,7 +12,21 @@ class PDFCreator
 {
   public:
     PDFCreator();
-    void createPDF(QTableView *tableView, QString path, QString title);
+    void createPDF();
+    void addTitle(QString tit);
+    void addTable (QTableView *tableView, QString nameTable);
+    void addPath(QString pathRef);
+    void addEmptyLine();
+
+
+private:
+    QString title;
+    QString path;
+    QList <QTableView*> listTables;
+    QList <QString> listNamesTables;
+    QString strStream;
+
+
 };
 
 #endif // PDFCREATOR_H

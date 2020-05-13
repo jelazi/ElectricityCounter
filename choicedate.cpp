@@ -83,6 +83,7 @@ close();
           AddNewInvoice addNewInvoice;
           addNewInvoice.setModal(true);
           addNewInvoice.setDate(choice);
+          QObject::connect(&addNewInvoice, SIGNAL(signalChangeData()), this, SLOT(slotChangeData()));
           addNewInvoice.exec();
 
         }
@@ -114,5 +115,9 @@ void choiceDate::on_month_currentIndexChanged(int index) {
 
 void choiceDate::on_year_currentIndexChanged(int index) {
     selectedYear = yearsChoiceDate[index].toInt();
+}
+
+void choiceDate::slotChangeData() {
+    signalChangeData();
 }
 
