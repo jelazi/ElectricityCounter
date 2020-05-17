@@ -134,6 +134,8 @@ bool User::isCorrectNewSum(TypeEntry typeEntry, double newSum) {
     return (beforeSum <=newSum);
 }
 
+
+
 QString User::getName() {
   return name;
 }

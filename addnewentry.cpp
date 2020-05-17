@@ -69,14 +69,16 @@ void AddNewEntry::fillUsers() {
         labelNT->setText("      NT: ");
         labelNT->setStyleSheet("font-weight: bold; color: red");
         layout->addWidget(labelNT);
-        double sumNTValue = user.getSummary(TypeEntry::realNT);
+
+        /*double sumNTValue = user.getSummary(TypeEntry::realNT);
         QLabel *sumNT = new QLabel;
         sumNT->setText("Stav: " + QString::number(sumNTValue, 'f', 2));
-        layout->addWidget(sumNT);
+        layout->addWidget(sumNT);*/
+
         QDoubleSpinBox *spinBoxNT = new QDoubleSpinBox;
         spinBoxNT->setObjectName(user.name + "_spinBoxNT");
         spinBoxNT->setRange(0, 9999999);
-        spinBoxNT->setValue(sumNTValue);
+     //   spinBoxNT->setValue(sumNTValue);
 
         layout->addWidget(spinBoxNT);
         QLabel *coinLblNT = new QLabel();
@@ -87,14 +89,18 @@ void AddNewEntry::fillUsers() {
         labelVT->setText("      VT: ");
         labelVT->setStyleSheet("font-weight: bold; color: red");
         layout->addWidget(labelVT);
-        double sumVTValue = user.getSummary(TypeEntry::realVT);
+
+
+     /*   double sumVTValue = user.getSummary(TypeEntry::realVT);
         QLabel *sumVT = new QLabel;
         sumVT->setText("Stav: " + QString::number(sumVTValue, 'f', 2));
-        layout->addWidget(sumVT);
+        layout->addWidget(sumVT);*/
+
         QDoubleSpinBox *spinBoxVT = new QDoubleSpinBox;
         spinBoxVT->setObjectName(user.name + "_spinBoxVT");
         spinBoxVT->setRange(0, 9999999);
-        spinBoxVT->setValue(sumVTValue);
+        //spinBoxVT->setValue(sumVTValue);
+
         layout->addWidget(spinBoxVT);
         QLabel *coinLblVT = new QLabel();
         coinLblVT->setText("kWh");
@@ -116,17 +122,20 @@ void AddNewEntry::fillUsers() {
         QDoubleSpinBox *spinBoxNT = this->findChild<QDoubleSpinBox *>(nameSpinBoxNT);
 
         QDoubleSpinBox *spinBoxVT = this->findChild<QDoubleSpinBox *>(nameSpinBoxVT);
+
         Entry entryNT;
         entryNT.type = TypeEntry::realNT;
         entryNT.user = name;
         double valNT = spinBoxNT->value();
         entryNT.setDate(*selectedDate);
-        if (!user->isCorrectNewSum(entryNT.type, valNT)) {
+
+        if (valNT < 0) {
             errorUser = user;
             entries.clear();
             return TypeMessageError::wrongInputData;
         }
-        entryNT.value = valNT - user->getSummary(TypeEntry::realNT);
+
+        entryNT.value = valNT;
         entries.push_back(entryNT);
 
         Entry entryVT;
@@ -135,12 +144,13 @@ void AddNewEntry::fillUsers() {
         double valVT = spinBoxVT->value();
 
         entryVT.setDate(*selectedDate);
-        if (!user->isCorrectNewSum(entryVT.type, valVT)) {
+
+        if (valVT < 0) {
             errorUser = user;
             entries.clear();
             return TypeMessageError::wrongInputData;
         }
-        entryVT.value =  valVT - user->getSummary(TypeEntry::realVT);
+        entryVT.value =  valVT;
         entries.push_back(entryVT);
     }
     return TypeMessageError::correct;
@@ -159,7 +169,7 @@ void AddNewEntry::on_okButton_clicked() {
                 if (typeMessageValue != TypeMessageError::correct) {
                 QMessageBox msgBox;
                 msgBox.setWindowTitle("Chybná data");
-                msgBox.setText("Špatně zadané data u " + errorUser->name + " nové hodnoty jsou menší než původní.");
+                msgBox.setText("Špatně zadané data u " + errorUser->name + " nové hodnoty jsou záporné hodnoty.");
                 msgBox.exec();
                 return;
     }

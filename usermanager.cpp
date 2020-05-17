@@ -64,6 +64,7 @@ void UserManager::setDefaultUser() {
     addUser("Činčalovi", entryNT, entryVT);
     addUser("Žižkovi", entryNT, entryVT);
     addUser("Čapkovi", entryNT, entryVT);
+    addUser("Hvězda", entryNT, entryVT);
     saveCurrentUsersToJson();
 }
 

@@ -28,6 +28,7 @@ void ViewResult::reloadInvoiceTable() {
   horizontalHeaderInvoice.append("pevná částka");
   horizontalHeaderInvoice.append("NT poměrová částka");
   horizontalHeaderInvoice.append("VT poměrová částka");
+  horizontalHeaderInvoice.append("Celkem faktura");
   modelInvoice.setHorizontalHeaderLabels(horizontalHeaderInvoice);
   modelInvoice.setVerticalHeaderLabels(verticalHeaderInvoice);
 
@@ -39,6 +40,13 @@ void ViewResult::reloadInvoiceTable() {
 
   QStandardItem *itemVariableRateVT = new QStandardItem(QString::number(invoice->variableRateVT) + " Kč");
   modelInvoice.setItem(0, 2, itemVariableRateVT);
+
+
+  double sum = invoice->fixedRate + invoice->variableRateNT + invoice->variableRateVT;
+  QStandardItem *itemSumInvoice = new QStandardItem(QString::number(sum) + " Kč");
+  modelInvoice.setItem(0, 3, itemSumInvoice);
+
+  modelInvoice.item(0,3)->setData(QBrush((QColor(255, 112, 85))), Qt::BackgroundRole);
 
   invoiceTable->resizeRowsToContents();
   invoiceTable->resizeColumnsToContents();
@@ -57,6 +65,7 @@ void ViewResult::reloadEntriesTable() {
   horizontalHeaderEntries.append("pevná část");
   horizontalHeaderEntries.append("Celkem zaplatí");
   horizontalHeaderEntries.append("Poměr VT a NT");
+
   modelEntries.setHorizontalHeaderLabels(horizontalHeaderEntries);
   modelEntries.setVerticalHeaderLabels(verticalHeaderEntries);
 
