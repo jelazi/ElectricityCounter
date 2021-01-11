@@ -68,14 +68,14 @@
       <item>
        <widget class="QPushButton" name="addInvoice">
         <property name="text">
-         <string>Přidat fakturu</string>
+         <string>Přidat nebo editovat fakturu</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnAddEntry">
         <property name="text">
-         <string>Přidat měření</string>
+         <string>Přidat nebo editovat měření</string>
         </property>
        </widget>
       </item>

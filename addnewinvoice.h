@@ -17,12 +17,16 @@ class AddNewInvoice : public QDialog
     ~AddNewInvoice();
     void setDate(MyDate *myDate);
 
-  private slots:
+    void setIsEditInvoice(bool value);
+
+private slots:
 
 
     void on_cancelBtn_clicked();
 
     void on_okBtn_clicked();
+
+    void on_pushButton_clicked();
 
 signals:
     void signalChangeData();
@@ -30,6 +34,9 @@ signals:
   private:
     Ui::AddNewInvoice *ui;
     void addItems();
+    void loadEditableData();
+    bool isEditInvoice = false;
+
 };
 
 #endif // ADDNEWINVOICE_H

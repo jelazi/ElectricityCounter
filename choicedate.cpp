@@ -5,6 +5,7 @@
 #include "invoicemanager.h"
 #include <QMessageBox>
 #include "viewresult.h"
+#include "addnewentry.h"
 
 
 QComboBox *monthComboBoxChoiceDate;
@@ -63,6 +64,9 @@ void choiceDate::setParentChoiceDate(TypeParentChoiceDate type) {
   if (typeParent == TypeParentChoiceDate::viewResult) {
       this->setWindowTitle("Vyberte datum pro výpočet");
     }
+  if (typeParent == TypeParentChoiceDate::addNewEntry) {
+      this->setWindowTitle("Vyberte datum měření");
+  }
 }
 
 void choiceDate::on_cancelBtn_clicked() {
@@ -75,14 +79,24 @@ close();
   if (typeParent == TypeParentChoiceDate::addNewInvoice) {
       this->setWindowTitle("Vyberte datum faktury");
       if (InvoiceManager::getInstance()->containsInvoiceByDate(*choice)) {
-          QMessageBox msgBox;
-          msgBox.setWindowTitle("Chybná data");
-          msgBox.setText("Na toto datum je již vystavená faktura");
-          msgBox.exec();
+          QMessageBox::StandardButton msgBox;
+          msgBox = QMessageBox::question(this, "Možná editace", "Na toto datum je již vystavená faktura. Chcete fakturu editovat?",
+                                          QMessageBox::Yes|QMessageBox::No);
+          if (msgBox == QMessageBox::Yes) {
+              qDebug() << "Yes was clicked";
+              AddNewInvoice addNewInvoice;
+              addNewInvoice.setModal(true);
+              addNewInvoice.setDate(choice);
+              addNewInvoice.setIsEditInvoice(true);
+              QObject::connect(&addNewInvoice, SIGNAL(signalChangeData()), this, SLOT(slotChangeData()));
+              addNewInvoice.exec();
+
+            }
         } else {
           AddNewInvoice addNewInvoice;
           addNewInvoice.setModal(true);
           addNewInvoice.setDate(choice);
+          addNewInvoice.setIsEditInvoice(false);
           QObject::connect(&addNewInvoice, SIGNAL(signalChangeData()), this, SLOT(slotChangeData()));
           addNewInvoice.exec();
 
@@ -105,6 +119,14 @@ close();
           msgBox.exec();
         }
     }
+
+  if (typeParent == TypeParentChoiceDate::addNewEntry) {
+      AddNewEntry addNewEntry;
+      addNewEntry.setModal(true);
+      addNewEntry.fillDateLabel(choice);
+      QObject::connect(&addNewEntry, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
+      addNewEntry.exec();
+  }
 }
 
 

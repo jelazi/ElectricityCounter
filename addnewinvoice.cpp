@@ -10,6 +10,7 @@ QVBoxLayout * dataLayout;
 QDoubleSpinBox *fixedRateSpinBox;
 QDoubleSpinBox *flexibleRateSpinBoxNT;
 QDoubleSpinBox *flexibleRateSpinBoxVT;
+QPushButton *deleteButton;
 
 MyDate currentDate = MyDate::getCurrentDate();
 
@@ -18,6 +19,7 @@ AddNewInvoice::AddNewInvoice(QWidget *parent): QDialog(parent), ui(new Ui::AddNe
   dateLabel = ui->dateLabel;
   dateLabel->setText("Faktura pro: " + currentDate.toStringWithName());
   dataLayout = ui->dataLayout;
+  deleteButton = ui->pushButton;
   addItems();
 }
 
@@ -97,10 +99,27 @@ fixedlayoutNT->addWidget(coinLblFlex);
 
 }
 
+void AddNewInvoice::loadEditableData() {
+    Invoice *invoice = InvoiceManager::getInstance()->getInvoiceByDate(currentDate);
+    fixedRateSpinBox->setValue(invoice->fixedRate);
+    flexibleRateSpinBoxNT->setValue(invoice->variableRateNT);
+    flexibleRateSpinBoxVT->setValue(invoice->variableRateVT);
+
+}
+
+void AddNewInvoice::setIsEditInvoice(bool value)
+{
+    isEditInvoice = value;
+    deleteButton->setVisible(isEditInvoice);
+    if (isEditInvoice) {
+        loadEditableData();
+    }
+}
+
 
 
 AddNewInvoice::~AddNewInvoice() {
-  delete ui;
+    delete ui;
 }
 
 
@@ -121,11 +140,28 @@ void AddNewInvoice::on_okBtn_clicked() {
       newInvoice->fixedRate = fixedRateSpinBox->value();
       newInvoice->variableRateNT = flexibleRateSpinBoxNT->value();
       newInvoice->variableRateVT = flexibleRateSpinBoxVT->value();
-      InvoiceManager::getInstance()->addInvoice(*newInvoice);
+      if (isEditInvoice) {
+          InvoiceManager::getInstance()->editInvoice(*newInvoice);
+      } else {
+          InvoiceManager::getInstance()->addInvoice(*newInvoice);
+      }
+
     close();
     signalChangeData();
     }
+}
 
-
-
+void AddNewInvoice::on_pushButton_clicked() {
+    QMessageBox::StandardButton msgBox;
+    msgBox = QMessageBox::question(this, "Vymazání faktury", "Opravdu chcete fakturu vymazat?",
+                                    QMessageBox::Yes|QMessageBox::No);
+    if (msgBox == QMessageBox::Yes) {
+        Invoice *newInvoice = new Invoice (currentDate);
+        newInvoice->fixedRate = fixedRateSpinBox->value();
+        newInvoice->variableRateNT = flexibleRateSpinBoxNT->value();
+        newInvoice->variableRateVT = flexibleRateSpinBoxVT->value();
+        InvoiceManager::getInstance()->deleteInvoice(*newInvoice);
+      }
+    close();
+    signalChangeData();
 }

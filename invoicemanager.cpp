@@ -30,6 +30,35 @@ void InvoiceManager::loadInvoicesFromJson() {
 }
 
 
+void InvoiceManager::editInvoice(Invoice invoice) {
+    if (invoicesList.isEmpty()) {
+        qDebug()<<"error invoices list is empty";
+        return;
+    }
+    for (int i = 0; i <invoicesList.length(); i++) {
+        if (invoicesList[i].date.isSameDate(invoice.date)) {
+            invoicesList[i].changeInvoice(invoice);
+        }
+    }
+    saveCurrentInvoiceToJson();
+}
+
+void InvoiceManager::deleteInvoice(Invoice invoice) {
+    if (invoicesList.isEmpty()) {
+        qDebug()<<"invoices list is empty";
+        return;
+    }
+    for (int i = 0; i < invoicesList.length(); i++) {
+        if (invoicesList[i].date.isSameDate(invoice.date)) {
+            invoicesList.removeAt(i);
+            saveCurrentInvoiceToJson();
+            return;
+        }
+    }
+    qDebug()<<"Error: there is not invoice this date";
+}
+
+
 Invoice* InvoiceManager::getInvoiceByDate(MyDate date) {
   for (int i = 0; i< invoicesList.length(); i++) {
       if (invoicesList[i].date.isSameDate(date)) {

@@ -164,10 +164,11 @@ void MainWindow::on_editUserBtn_clicked() {
 }
 
 void MainWindow::on_btnAddEntry_clicked() {
-    AddNewEntry addNewEntry;
-    addNewEntry.setModal(true);
-    QObject::connect(&addNewEntry, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
-    addNewEntry.exec();
+    choiceDate choiceD;
+    choiceD.setModal(true);
+    choiceD.setParentChoiceDate(TypeParentChoiceDate::addNewEntry);
+    QObject::connect(&choiceD, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
+    choiceD.exec();
 
 }
 

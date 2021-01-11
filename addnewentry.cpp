@@ -6,16 +6,13 @@
 
 QPushButton *okButtonAddEntry;
 QPushButton *cancelButtonAddEntry;
-QComboBox *monthComboBoxAddEntry;
-QComboBox *yearComboBoxAddEntry;
 QVBoxLayout *usersLayout;
 
-QList<QString> years;
-int selectedMonthAddEntry;
-int selectedYearAddEntry;
 Entry NT;
 Entry VT;
 User *errorUser = new User(1, "", NT, VT);
+QLabel *dateLabelEntry;
+MyDate *selectedDate;
 
 
 
@@ -26,32 +23,16 @@ AddNewEntry::AddNewEntry(QWidget *parent): QDialog(parent), ui(new Ui::AddNewEnt
     this->setWindowTitle("Přidání měření");
     okButtonAddEntry = ui->okButton;
     cancelButtonAddEntry = ui->cancelButton;
-    monthComboBoxAddEntry = ui->monthComboBox;
-    yearComboBoxAddEntry = ui->yearComboBox;
     usersLayout = ui->userLayout;
-    fillYearsList();
+    dateLabelEntry = ui->label;
     fillUsers();
 
 }
 
-void AddNewEntry::fillYearsList () {
-    MyDate now = MyDate::getCurrentDate();
-    selectedMonthAddEntry = now.getMonth();
-    selectedYearAddEntry = now.getYear();
-    int nowYear = now.getYear();
-    for (int i = nowYear - 1; i < nowYear + 30; i++) {
-        years.push_back(QString::number(i));
-    }
-    foreach (QString month, MyDate::getListNameMonths()) {
-        monthComboBoxAddEntry->addItem(month);
-    }
-    monthComboBoxAddEntry->setCurrentIndex(now.getMonth() - 1);
-    int width = monthComboBoxAddEntry->minimumSizeHint().width();
-    monthComboBoxAddEntry->setMinimumWidth(width);
-    foreach (QString year, years) {
-        yearComboBoxAddEntry->addItem(year, QVariant(year.toInt()));
-    }
-    yearComboBoxAddEntry->setCurrentIndex(1);
+void AddNewEntry::fillDateLabel (MyDate *myDate) {
+    selectedDate = myDate;
+    QString date = "Datum měření: " + myDate->toStringWithName();
+    dateLabelEntry->setText(date);
 }
 
 
@@ -112,7 +93,6 @@ void AddNewEntry::fillUsers() {
  TypeMessageError AddNewEntry::getValues() {
     entries.clear();
     QList<QWidget *> widgets = this->findChildren<QWidget*>();
-    MyDate *selectedDate = new MyDate(selectedMonthAddEntry, selectedYearAddEntry);
     QList<QString> nameUsers = UserManager::getInstance()->getNameUsers();
 
     foreach (QString name, nameUsers) {
@@ -192,10 +172,4 @@ void AddNewEntry::on_okButton_clicked() {
     }
 }
 
-void AddNewEntry::on_monthComboBox_currentIndexChanged(int index) {
-    selectedMonthAddEntry = index + 1;
-}
 
-void AddNewEntry::on_yearComboBox_currentIndexChanged(int index) {
-    selectedYearAddEntry = years[index].toInt();
-}

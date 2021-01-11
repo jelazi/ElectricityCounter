@@ -12,6 +12,8 @@ class Invoice {
     double variableRateVT;
     MyDate date;
 
+    void changeInvoice(Invoice anotherInvoice);
+
   private:
 
 

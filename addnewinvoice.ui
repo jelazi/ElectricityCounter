@@ -63,6 +63,22 @@
    </property>
    <layout class="QVBoxLayout" name="dataLayout"/>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>420</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Vymazat fakturu</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

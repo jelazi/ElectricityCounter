@@ -10,6 +10,8 @@ class InvoiceManager {
 
     Invoice* getInvoiceByDate (MyDate date);
     void addInvoice(Invoice invoice);
+    void editInvoice(Invoice invoice);
+    void deleteInvoice(Invoice invoice);
     void saveCurrentInvoiceToJson();
     bool containsInvoiceByDate(Invoice invoice);
     QList <Invoice> getInvoices();
@@ -20,6 +22,7 @@ class InvoiceManager {
       static InvoiceManager* instance;
       InvoiceManager();
       void loadInvoicesFromJson();
+
 
 
       QList<Invoice>invoicesList;

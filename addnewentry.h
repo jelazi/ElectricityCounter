@@ -16,6 +16,7 @@ class AddNewEntry : public QDialog {
 public:
     explicit AddNewEntry(QWidget *parent = nullptr);
     ~AddNewEntry();
+    void fillDateLabel(MyDate *myDate);
 
 private slots:
     void on_cancelButton_clicked();
@@ -23,9 +24,6 @@ private slots:
     void on_okButton_clicked();
     TypeMessageError getValues();
 
-    void on_monthComboBox_currentIndexChanged(int index);
-
-    void on_yearComboBox_currentIndexChanged(int index);
 
 
 signals:
@@ -34,7 +32,7 @@ signals:
 
 private:
     Ui::AddNewEntry *ui;
-    void fillYearsList();
+
     QList <Entry> entries;
 };
 

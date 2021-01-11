@@ -18,8 +18,8 @@ QString FileManager::loadTextFileWithPath(QString path) {
             return "";
         }
         file.close();
-    }
 
+    }
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Issues with opening file!";
     }
