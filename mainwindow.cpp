@@ -166,10 +166,10 @@ void MainWindow::on_editUserBtn_clicked() {
 void MainWindow::on_btnAddEntry_clicked() {
     choiceDate choiceD;
     choiceD.setModal(true);
+    choiceD.setUsers(users);
     choiceD.setParentChoiceDate(TypeParentChoiceDate::addNewEntry);
     QObject::connect(&choiceD, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
     choiceD.exec();
-
 }
 
 void MainWindow::on_addInvoice_clicked() {

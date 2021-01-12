@@ -34,8 +34,12 @@ TypeMessageError User::addEntry(Entry entry) {
             realEntriesNT.append(entry);
             return TypeMessageError::correct;
         } else {
-            qDebug() << "error: same date Entry";
-            return TypeMessageError::sameDate;
+            for (int i = 0; i < realEntriesNT.length(); i++) {
+                if (realEntriesNT[i].date.isSameDate(entry.date)) {
+                    realEntriesNT[i].value = entry.value;
+                    return TypeMessageError::correct;
+                }
+            }
         }
     }
     if (entry.type == TypeEntry::realVT) {
@@ -43,8 +47,12 @@ TypeMessageError User::addEntry(Entry entry) {
             realEntriesVT.append(entry);
             return TypeMessageError::correct;
         } else {
-            qDebug() << "error: same date Entry";
-            return TypeMessageError::sameDate;
+            for (int i = 0; i < realEntriesVT.length(); i++) {
+                if (realEntriesVT[i].date.isSameDate(entry.date)) {
+                    realEntriesVT[i].value = entry.value;
+                    return TypeMessageError::correct;
+                }
+            }
         }
     }
 

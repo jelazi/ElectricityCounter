@@ -1,5 +1,5 @@
 #include "invoicewindow.h"
-#include "ui_addnewinvoice.h"
+#include "ui_invoicewindow.h"
 #include "QDoubleSpinBox"
 #include "usermanager.h"
 #include "QMessageBox"

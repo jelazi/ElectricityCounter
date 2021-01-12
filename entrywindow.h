@@ -18,6 +18,8 @@ public:
     ~EntryWindow();
     void fillDateLabel(MyDate *myDate);
 
+    void setIsEditable(bool value);
+
 private slots:
     void on_cancelButton_clicked();
     void fillUsers();
@@ -32,8 +34,9 @@ signals:
 
 private:
     Ui::AddNewEntry *ui;
-
+    bool isEditable = false;
     QList <Entry> entries;
+    void fillDataForEdit();
 };
 
 #endif // ADDNEWENTRY_H

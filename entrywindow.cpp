@@ -1,5 +1,5 @@
 #include "entrywindow.h"
-#include "ui_addnewentry.h"
+#include "ui_entrywindow.h"
 #include "usermanager.h"
 #include "QDoubleSpinBox"
 
@@ -26,7 +26,6 @@ EntryWindow::EntryWindow(QWidget *parent): QDialog(parent), ui(new Ui::AddNewEnt
     usersLayout = ui->userLayout;
     dateLabelEntry = ui->label;
     fillUsers();
-
 }
 
 void EntryWindow::fillDateLabel (MyDate *myDate) {
@@ -134,13 +133,36 @@ void EntryWindow::fillUsers() {
         entries.push_back(entryVT);
     }
     return TypeMessageError::correct;
-}
+ }
 
-EntryWindow::~EntryWindow() {
-    delete ui;
-}
+ void EntryWindow::fillDataForEdit() {
+     QList<QWidget *> widgets = this->findChildren<QWidget*>();
+     QList<QString> nameUsers = UserManager::getInstance()->getNameUsers();
 
-void EntryWindow::on_cancelButton_clicked() {
+     foreach (QString name, nameUsers) {
+         User *user = UserManager::getInstance()->getUserByName(name);
+         QString nameSpinBoxNT = name + "_spinBoxNT";
+         QString nameSpinBoxVT = name + "_spinBoxVT";
+         QDoubleSpinBox *spinBoxNT = this->findChild<QDoubleSpinBox *>(nameSpinBoxNT);
+
+         QDoubleSpinBox *spinBoxVT = this->findChild<QDoubleSpinBox *>(nameSpinBoxVT);
+         Entry entryNT = user->getEntryByDate(*selectedDate, TypeEntry::realNT);
+         Entry entryVT = user->getEntryByDate(*selectedDate, TypeEntry::realVT);
+         spinBoxNT->setValue(entryNT.value);
+         spinBoxVT->setValue(entryVT.value);
+     }
+ }
+
+ void EntryWindow::setIsEditable(bool value) {
+     isEditable = value;
+     if (isEditable) fillDataForEdit();
+ }
+
+ EntryWindow::~EntryWindow() {
+     delete ui;
+ }
+
+ void EntryWindow::on_cancelButton_clicked() {
     close();
 }
 
@@ -161,13 +183,8 @@ void EntryWindow::on_okButton_clicked() {
         close();
     } else {
         QMessageBox msgBox;
-        if (typeMessage == TypeMessageError::sameDate) {
-            msgBox.setWindowTitle("Chybná data");
-            msgBox.setText("Toto datum se již použilo.");
-        } else {
-            msgBox.setWindowTitle("Chybná data");
-            msgBox.setText("Jiná chyba");
-        }
+        msgBox.setWindowTitle("Chybná data");
+        msgBox.setText("Jiná chyba");
         msgBox.exec();
     }
 }

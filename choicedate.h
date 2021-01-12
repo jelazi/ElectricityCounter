@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "structures.h"
+#include "usermanager.h"
 
 namespace Ui {
   class choiceDate;
@@ -16,7 +17,9 @@ class choiceDate : public QDialog {
     ~choiceDate();
     void setParentChoiceDate (TypeParentChoiceDate type);
 
-  private slots:
+    void setUsers(const QList<User> &value);
+
+private slots:
     void on_cancelBtn_clicked();
 
     void on_okBtn_clicked();
@@ -33,6 +36,7 @@ signals:
   private:
     Ui::choiceDate *ui;
     void fillYearsList ();
+    QList <User> users;
 
 
 };

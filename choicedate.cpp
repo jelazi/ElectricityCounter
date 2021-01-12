@@ -41,7 +41,7 @@ void choiceDate::fillYearsList () {
     selectedMonth = now.getMonth();
     selectedYear = now.getYear();
     int nowYear = now.getYear();
-    for (int i = nowYear - 1; i < nowYear + 30; i++) {
+    for (int i = nowYear - 10; i < nowYear + 30; i++) {
         yearsChoiceDate.push_back(QString::number(i));
     }
     foreach (QString month, MyDate::getListNameMonths()) {
@@ -53,11 +53,16 @@ void choiceDate::fillYearsList () {
     foreach (QString year, yearsChoiceDate) {
         yearComboBoxChoiceDate->addItem(year, QVariant(year.toInt()));
     }
-    yearComboBoxChoiceDate->setCurrentIndex(1);
+    yearComboBoxChoiceDate->setCurrentIndex(10);
+}
+
+void choiceDate::setUsers(const QList<User> &value)
+{
+    users = value;
 }
 
 void choiceDate::setParentChoiceDate(TypeParentChoiceDate type) {
-  typeParent = type;
+    typeParent = type;
   if (typeParent == TypeParentChoiceDate::addNewInvoice) {
       this->setWindowTitle("Vyberte datum faktury");
     }
@@ -121,11 +126,39 @@ close();
     }
 
   if (typeParent == TypeParentChoiceDate::addNewEntry) {
+      QList<QString>nameUserUsesEntries = QList<QString>();
+      for(int i = 0; i < users.length(); i++) {
+          if (users[i].containsEntry(*choice)) {
+              nameUserUsesEntries.append(users[i].getName());
+          }
+      }
       EntryWindow addNewEntry;
       addNewEntry.setModal(true);
+      if (nameUserUsesEntries.isEmpty()) {
+      } else {
+          QMessageBox::StandardButton msgBox;
+          QString messageString = "Na toto datum jsou již vložena měření pro tyto jména: ";
+          for (int i = 0; i < nameUserUsesEntries.length(); i++) {
+              messageString += nameUserUsesEntries[i];
+              if (i != nameUserUsesEntries.length() - 1) {
+                  messageString +=", ";
+              } else {
+                  messageString +=".";
+              }
+          }
+          messageString += " Chcete tyto měření editovat?";
+
+          msgBox = QMessageBox::question(this, "Možná editace", messageString, QMessageBox::Yes|QMessageBox::No);
+          if (msgBox == QMessageBox::Yes) {
+            } else {
+              return;
+          }
+      }
       addNewEntry.fillDateLabel(choice);
       QObject::connect(&addNewEntry, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));
+      addNewEntry.setIsEditable(!nameUserUsesEntries.isEmpty());
       addNewEntry.exec();
+
   }
 }
 
