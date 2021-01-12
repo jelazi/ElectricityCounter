@@ -9,18 +9,18 @@ JsonParser::JsonParser() {
 QJsonObject JsonParser::userToJson(User user) {
     QJsonObject object;
     object["ID"] = user.getID();
-    object["name"] = user.name;
+    object["name"] = user.getName();
     QJsonObject initialDesicionNT;
     QJsonObject initialDesicionVT;
-    initialDesicionNT["date"] = user.initialDesicionNT.date.toString();
-    initialDesicionNT["value"] = user.initialDesicionNT.value;
-    initialDesicionVT["date"] = user.initialDesicionVT.date.toString();
-    initialDesicionVT["value"] = user.initialDesicionVT.value;
+    initialDesicionNT["date"] = user.getInitialDesicionNT().date.toString();
+    initialDesicionNT["value"] = user.getInitialDesicionNT().value;
+    initialDesicionVT["date"] = user.getInitialDesicionVT().date.toString();
+    initialDesicionVT["value"] = user.getInitialDesicionVT().value;
     object["initialDesicionNT"] = initialDesicionNT;
     object["initialDesicionVT"] = initialDesicionVT;
-    QJsonArray realEntriesVT = User::entriesToJson(user.realEntriesVT);
+    QJsonArray realEntriesVT = User::entriesToJson(user.getRealEntriesVT());
     object["realEntriesVT"] = realEntriesVT;
-    QJsonArray realEntriesNT = User::entriesToJson(user.realEntriesNT);
+    QJsonArray realEntriesNT = User::entriesToJson(user.getRealEntriesNT());
     object["realEntriesNT"] = realEntriesNT;
 
     return object;
@@ -87,9 +87,9 @@ User JsonParser::jsonToUser(QJsonObject object) {
     QJsonValue arrayRealEntriesVTValue = object.value("realEntriesVT");
 
     QJsonArray arrayRealEntriesNT = arrayRealEntriesNTValue.toArray();
-    user->realEntriesNT = User::entriesFromJson(arrayRealEntriesNT);
+    user->setRealEntriesNT(User::entriesFromJson(arrayRealEntriesNT));
     QJsonArray arrayRealEntriesVT = arrayRealEntriesVTValue.toArray();
-    user->realEntriesVT = User::entriesFromJson(arrayRealEntriesVT);
+    user->setRealEntriesVT(User::entriesFromJson(arrayRealEntriesVT));
 
 
     return *user;
@@ -116,7 +116,7 @@ QList <User> JsonParser::getUsersFromJson (QString json) {
             QJsonObject object = value.toObject();
             User user = jsonToUser(object);
 
-            if (!user.name.isNull() && !user.name.isEmpty() && user.getID() > 0 && user.initialDesicionNT.value >= 0 && user.initialDesicionVT.value >= 0) {
+            if (!user.getName().isNull() && !user.getName().isEmpty() && user.getID() > 0 && user.getInitialDesicionNT().value >= 0 && user.getInitialDesicionVT().value >= 0) {
                 users.append(user);
             } else {
                 qDebug()<< "noCorrect user data";

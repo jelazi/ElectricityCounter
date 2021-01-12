@@ -1,4 +1,4 @@
-#include "addnewentry.h"
+#include "entrywindow.h"
 #include "ui_addnewentry.h"
 #include "usermanager.h"
 #include "QDoubleSpinBox"
@@ -17,7 +17,7 @@ MyDate *selectedDate;
 
 
 
-AddNewEntry::AddNewEntry(QWidget *parent): QDialog(parent), ui(new Ui::AddNewEntry) {
+EntryWindow::EntryWindow(QWidget *parent): QDialog(parent), ui(new Ui::AddNewEntry) {
     entries.clear();
     ui->setupUi(this);
     this->setWindowTitle("Přidání měření");
@@ -29,20 +29,20 @@ AddNewEntry::AddNewEntry(QWidget *parent): QDialog(parent), ui(new Ui::AddNewEnt
 
 }
 
-void AddNewEntry::fillDateLabel (MyDate *myDate) {
+void EntryWindow::fillDateLabel (MyDate *myDate) {
     selectedDate = myDate;
     QString date = "Datum měření: " + myDate->toStringWithName();
     dateLabelEntry->setText(date);
 }
 
 
-void AddNewEntry::fillUsers() {
+void EntryWindow::fillUsers() {
     QList<User> users = UserManager::getInstance()->getUsers();
     foreach(User user, users) {
         QHBoxLayout *layout = new QHBoxLayout();
 
         QLabel *name = new QLabel;
-        name->setText(user.name);
+        name->setText(user.getName());
         name->setStyleSheet("font-weight: bold; color: blue");
         layout->addWidget(name);
         layout->addStretch();
@@ -57,7 +57,7 @@ void AddNewEntry::fillUsers() {
         layout->addWidget(sumNT);*/
 
         QDoubleSpinBox *spinBoxNT = new QDoubleSpinBox;
-        spinBoxNT->setObjectName(user.name + "_spinBoxNT");
+        spinBoxNT->setObjectName(user.getName() + "_spinBoxNT");
         spinBoxNT->setRange(0, 9999999);
      //   spinBoxNT->setValue(sumNTValue);
 
@@ -78,7 +78,7 @@ void AddNewEntry::fillUsers() {
         layout->addWidget(sumVT);*/
 
         QDoubleSpinBox *spinBoxVT = new QDoubleSpinBox;
-        spinBoxVT->setObjectName(user.name + "_spinBoxVT");
+        spinBoxVT->setObjectName(user.getName() + "_spinBoxVT");
         spinBoxVT->setRange(0, 9999999);
         //spinBoxVT->setValue(sumVTValue);
 
@@ -90,7 +90,7 @@ void AddNewEntry::fillUsers() {
     }
 }
 
- TypeMessageError AddNewEntry::getValues() {
+ TypeMessageError EntryWindow::getValues() {
     entries.clear();
     QList<QWidget *> widgets = this->findChildren<QWidget*>();
     QList<QString> nameUsers = UserManager::getInstance()->getNameUsers();
@@ -136,20 +136,20 @@ void AddNewEntry::fillUsers() {
     return TypeMessageError::correct;
 }
 
-AddNewEntry::~AddNewEntry() {
+EntryWindow::~EntryWindow() {
     delete ui;
 }
 
-void AddNewEntry::on_cancelButton_clicked() {
+void EntryWindow::on_cancelButton_clicked() {
     close();
 }
 
-void AddNewEntry::on_okButton_clicked() {
+void EntryWindow::on_okButton_clicked() {
     TypeMessageError typeMessageValue = getValues();
                 if (typeMessageValue != TypeMessageError::correct) {
                 QMessageBox msgBox;
                 msgBox.setWindowTitle("Chybná data");
-                msgBox.setText("Špatně zadané data u " + errorUser->name + " nové hodnoty jsou záporné hodnoty.");
+                msgBox.setText("Špatně zadané data u " + errorUser->getName() + " nové hodnoty jsou záporné hodnoty.");
                 msgBox.exec();
                 return;
     }

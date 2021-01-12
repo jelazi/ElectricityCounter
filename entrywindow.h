@@ -10,12 +10,12 @@ namespace Ui {
 class AddNewEntry;
 }
 
-class AddNewEntry : public QDialog {
+class EntryWindow : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AddNewEntry(QWidget *parent = nullptr);
-    ~AddNewEntry();
+    explicit EntryWindow(QWidget *parent = nullptr);
+    ~EntryWindow();
     void fillDateLabel(MyDate *myDate);
 
 private slots:

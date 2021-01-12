@@ -81,7 +81,7 @@ void ViewResult::reloadEntriesTable() {
 
   for(int i = 0; i < usersList.length();i++) {
       User user = usersList[i];
-      QStandardItem *itemUserName = new QStandardItem(QString(user.name));
+      QStandardItem *itemUserName = new QStandardItem(QString(user.getName()));
       modelEntries.setItem(i, 0, itemUserName);
 
 

@@ -4,7 +4,7 @@
 #include "QDebug"
 #include <QtCore>
 #include "editusers.h"
-#include "addnewentry.h"
+#include "entrywindow.h"
 
 #include "usermanager.h"
 #include "choicedate.h"
@@ -109,19 +109,19 @@ void MainWindow::reloadUserTable() {
 
 void MainWindow::fillDataUserTable(User user, int ind) {
 
-    foreach (Entry entry, user.realEntriesNT) {
+    foreach (Entry entry, user.getRealEntriesNT()) {
         fillDataUserEntry(entry, ind);
     }
 
-    foreach (Entry entry, user.realEntriesNT) {
+    foreach (Entry entry, user.getRealEntriesNT()) {
         fillDataUserEntry(entry, ind);
     }
 
-    foreach (Entry entry, user.realEntriesVT) {
+    foreach (Entry entry, user.getRealEntriesVT()) {
         fillDataUserEntry(entry, ind);
     }
 
-    foreach (Entry entry, user.realEntriesNT) {
+    foreach (Entry entry, user.getRealEntriesNT()) {
         fillDataUserEntry(entry, ind);
     }
 }

@@ -66,21 +66,21 @@ void EditUsers::reloadUserTable() {
         QStandardItem *itemUserID= new QStandardItem(QString::number(usersList[i].getID()));
         model.setItem(i, 0, itemUserID);
 
-        QStandardItem *itemUserName = new QStandardItem(QString(usersList[i].name));
+        QStandardItem *itemUserName = new QStandardItem(QString(usersList[i].getName()));
         model.setItem(i, 1, itemUserName);
 
-        QStandardItem *itemUserInitialDesicionNT = new QStandardItem(QString::number(usersList[i].initialDesicionNT.value, 'f', 2));
+        QStandardItem *itemUserInitialDesicionNT = new QStandardItem(QString::number(usersList[i].getInitialDesicionNT().value, 'f', 2));
         model.setItem(i, 2, itemUserInitialDesicionNT);
 
 
-        QStandardItem *itemUserInitialDesicionNTDate = new QStandardItem(usersList[i].initialDesicionNT.date.toString());
+        QStandardItem *itemUserInitialDesicionNTDate = new QStandardItem(usersList[i].getInitialDesicionNT().date.toString());
         model.setItem(i, 3, itemUserInitialDesicionNTDate);
 
 
-        QStandardItem *itemUserInitialDesicionVT = new QStandardItem(QString::number(usersList[i].initialDesicionVT.value, 'f', 2));
+        QStandardItem *itemUserInitialDesicionVT = new QStandardItem(QString::number(usersList[i].getInitialDesicionVT().value, 'f', 2));
         model.setItem(i, 4, itemUserInitialDesicionVT);
 
-        QStandardItem *itemUserInitialDesicionVTDate = new QStandardItem(usersList[i].initialDesicionVT.date.toString());
+        QStandardItem *itemUserInitialDesicionVTDate = new QStandardItem(usersList[i].getInitialDesicionVT().date.toString());
         model.setItem(i, 5, itemUserInitialDesicionVTDate);
     }
       userTable->resizeRowsToContents();
@@ -127,7 +127,7 @@ void EditUsers::on_userTable_doubleClicked(const QModelIndex &index) {
 
     QMessageBox reply;
     reply.setWindowTitle("Editace uživatele");
-    reply.setText("Co chcete s uživatelem: " + selectedUser.name + " udělat?");
+    reply.setText("Co chcete s uživatelem: " + selectedUser.getName() + " udělat?");
      QAbstractButton *myYesButton = reply.addButton(("Editovat"), QMessageBox::YesRole);
      QAbstractButton *myNoButton = reply.addButton(("Vymazat"), QMessageBox::YesRole);
      reply.addButton(("Storno"), QMessageBox::NoRole);

@@ -38,9 +38,9 @@ AddUserDialog::~AddUserDialog() {
 void AddUserDialog::setUser (User user) {
     isNew = false;
     userId = user.getID();
-    name = user.name;
-    entryNT = user.initialDesicionNT;
-    entryVT = user.initialDesicionVT;
+    name = user.getName();
+    entryNT = user.getInitialDesicionNT();
+    entryVT = user.getInitialDesicionVT();
     nameLineEdit->setText(name);
     numberLineEditNT->setValue(entryNT.value);
     numberLineEditVT->setValue(entryVT.value);

@@ -1,4 +1,4 @@
-#include "addnewinvoice.h"
+#include "invoicewindow.h"
 #include "ui_addnewinvoice.h"
 #include "QDoubleSpinBox"
 #include "usermanager.h"
@@ -14,7 +14,7 @@ QPushButton *deleteButton;
 
 MyDate currentDate = MyDate::getCurrentDate();
 
-AddNewInvoice::AddNewInvoice(QWidget *parent): QDialog(parent), ui(new Ui::AddNewInvoice) {
+InvoiceWindow::InvoiceWindow(QWidget *parent): QDialog(parent), ui(new Ui::AddNewInvoice) {
   ui->setupUi(this);
   dateLabel = ui->dateLabel;
   dateLabel->setText("Faktura pro: " + currentDate.toStringWithName());
@@ -23,11 +23,11 @@ AddNewInvoice::AddNewInvoice(QWidget *parent): QDialog(parent), ui(new Ui::AddNe
   addItems();
 }
 
-void AddNewInvoice::setDate(MyDate *myDate) {
+void InvoiceWindow::setDate(MyDate *myDate) {
   currentDate = *myDate;
 }
 
-void AddNewInvoice::addItems() {
+void InvoiceWindow::addItems() {
   QList<User> usersList = UserManager::getInstance()->getUsers();
   QString usersString = "Faktura bude rozdělena mezi: ";
   foreach (User user, usersList) {
@@ -99,7 +99,7 @@ fixedlayoutNT->addWidget(coinLblFlex);
 
 }
 
-void AddNewInvoice::loadEditableData() {
+void InvoiceWindow::loadEditableData() {
     Invoice *invoice = InvoiceManager::getInstance()->getInvoiceByDate(currentDate);
     fixedRateSpinBox->setValue(invoice->fixedRate);
     flexibleRateSpinBoxNT->setValue(invoice->variableRateNT);
@@ -107,7 +107,7 @@ void AddNewInvoice::loadEditableData() {
 
 }
 
-void AddNewInvoice::setIsEditInvoice(bool value)
+void InvoiceWindow::setIsEditInvoice(bool value)
 {
     isEditInvoice = value;
     deleteButton->setVisible(isEditInvoice);
@@ -118,17 +118,17 @@ void AddNewInvoice::setIsEditInvoice(bool value)
 
 
 
-AddNewInvoice::~AddNewInvoice() {
+InvoiceWindow::~InvoiceWindow() {
     delete ui;
 }
 
 
 
-void AddNewInvoice::on_cancelBtn_clicked() {
+void InvoiceWindow::on_cancelBtn_clicked() {
     close();
 }
 
-void AddNewInvoice::on_okBtn_clicked() {
+void InvoiceWindow::on_okBtn_clicked() {
   QMessageBox msgBox;
   msgBox.setWindowTitle("Uložení" + currentDate.toStringWithName());
   msgBox.setText("Chcete tuto fakturu za " + currentDate.toStringWithName() + "uložit?");
@@ -151,7 +151,7 @@ void AddNewInvoice::on_okBtn_clicked() {
     }
 }
 
-void AddNewInvoice::on_pushButton_clicked() {
+void InvoiceWindow::on_pushButton_clicked() {
     QMessageBox::StandardButton msgBox;
     msgBox = QMessageBox::question(this, "Vymazání faktury", "Opravdu chcete fakturu vymazat?",
                                     QMessageBox::Yes|QMessageBox::No);

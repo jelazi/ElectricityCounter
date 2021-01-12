@@ -7,11 +7,7 @@
 class User {
 public:
     User(int id, QString name, Entry initialDesicionNT, Entry initialDesicionVT);
-    QString name;
-    QList <Entry> realEntriesVT;
-    QList <Entry> realEntriesNT;
-    Entry initialDesicionNT;
-    Entry initialDesicionVT;
+
     int getID();
     void setID(int inputID);
     QList<Entry> getRealEntries(TypeEntry typeEntry);
@@ -25,7 +21,29 @@ public:
     QString getName();
     Entry getEntryByDate(MyDate date, TypeEntry typeEntry);
 
+    void setName(const QString &value);
+
+    QList<Entry> getRealEntriesVT() const;
+    void setRealEntriesVT(const QList<Entry> &value);
+
+    QList<Entry> getRealEntriesNT() const;
+    void setRealEntriesNT(const QList<Entry> &value);
+
+    Entry getInitialDesicionNT() const;
+    void setInitialDesicionNT(const Entry &value);
+
+    Entry getInitialDesicionVT() const;
+    void setInitialDesicionVT(const Entry &value);
+
 private:
+    //properties
+    QString name;
+    QList <Entry> realEntriesVT;
+    QList <Entry> realEntriesNT;
+    Entry initialDesicionNT;
+    Entry initialDesicionVT;
+
+
     int id;
     bool isSameDateEntry(Entry entry);
 };

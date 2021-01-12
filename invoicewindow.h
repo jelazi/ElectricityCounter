@@ -8,13 +8,13 @@ namespace Ui {
   class AddNewInvoice;
 }
 
-class AddNewInvoice : public QDialog
+class InvoiceWindow : public QDialog
 {
     Q_OBJECT
 
   public:
-    explicit AddNewInvoice(QWidget *parent = nullptr);
-    ~AddNewInvoice();
+    explicit InvoiceWindow(QWidget *parent = nullptr);
+    ~InvoiceWindow();
     void setDate(MyDate *myDate);
 
     void setIsEditInvoice(bool value);

@@ -1,11 +1,11 @@
 #include "choicedate.h"
 #include "ui_choicedate.h"
 #include "mydate.h"
-#include "addnewinvoice.h"
+#include "invoicewindow.h"
 #include "invoicemanager.h"
 #include <QMessageBox>
 #include "viewresult.h"
-#include "addnewentry.h"
+#include "entrywindow.h"
 
 
 QComboBox *monthComboBoxChoiceDate;
@@ -84,7 +84,7 @@ close();
                                           QMessageBox::Yes|QMessageBox::No);
           if (msgBox == QMessageBox::Yes) {
               qDebug() << "Yes was clicked";
-              AddNewInvoice addNewInvoice;
+              InvoiceWindow addNewInvoice;
               addNewInvoice.setModal(true);
               addNewInvoice.setDate(choice);
               addNewInvoice.setIsEditInvoice(true);
@@ -93,7 +93,7 @@ close();
 
             }
         } else {
-          AddNewInvoice addNewInvoice;
+          InvoiceWindow addNewInvoice;
           addNewInvoice.setModal(true);
           addNewInvoice.setDate(choice);
           addNewInvoice.setIsEditInvoice(false);
@@ -121,7 +121,7 @@ close();
     }
 
   if (typeParent == TypeParentChoiceDate::addNewEntry) {
-      AddNewEntry addNewEntry;
+      EntryWindow addNewEntry;
       addNewEntry.setModal(true);
       addNewEntry.fillDateLabel(choice);
       QObject::connect(&addNewEntry, SIGNAL(signalChangeData()), this, SLOT (slotChangeData()));

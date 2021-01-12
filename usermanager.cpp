@@ -106,7 +106,7 @@ int UserManager::getLastFreeID() {
 QList<QString> UserManager::getNameUsers () {
     QList<QString> userNames;
     foreach (User user, usersList) {
-        userNames.push_back(user.name);
+        userNames.push_back(user.getName());
     }
     return userNames;
 }
@@ -124,7 +124,7 @@ TypeMessageError UserManager::addEntries(QList<Entry> entries) {
 
 User* UserManager::getUserByName(QString name) {
     for (int i = 0; i < usersList.length(); i++) {
-        if (usersList[i].name == name) return &usersList[i];
+        if (usersList[i].getName() == name) return &usersList[i];
     }
     qDebug()<<"error find user in usersList";
     return &usersList[0];
@@ -222,9 +222,9 @@ QList<Entry> UserManager::getEntriesForCompare(Entry entry) {
 void UserManager::updateUser(User user) {
     for (int i = 0; i < usersList.length(); i++) {
         if (usersList[i].getID() == user.getID()) {
-           usersList[i].name = user.name;
-           usersList[i].initialDesicionNT = user.initialDesicionNT;
-           usersList[i].initialDesicionVT = user.initialDesicionVT;
+           usersList[i].setName(user.getName());
+           usersList[i].setInitialDesicionNT(user.getInitialDesicionNT());
+           usersList[i].setInitialDesicionVT(user.getInitialDesicionVT());
         }
     }
 }

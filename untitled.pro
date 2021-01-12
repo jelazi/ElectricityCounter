@@ -18,14 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    addnewentry.cpp \
-    addnewinvoice.cpp \
     adduserdialog.cpp \
     choicedate.cpp \
     editusers.cpp \
+    entrywindow.cpp \
     filemanager.cpp \
     invoice.cpp \
     invoicemanager.cpp \
+    invoicewindow.cpp \
     jsonparser.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -37,14 +37,14 @@ SOURCES += \
     viewresult.cpp
 
 HEADERS += \
-    addnewentry.h \
-    addnewinvoice.h \
     adduserdialog.h \
     choicedate.h \
     editusers.h \
+    entrywindow.h \
     filemanager.h \
     invoice.h \
     invoicemanager.h \
+    invoicewindow.h \
     jsonparser.h \
     mainwindow.h \
     mydate.h \
@@ -56,11 +56,11 @@ HEADERS += \
     viewresult.h
 
 FORMS += \
-    addnewentry.ui \
-    addnewinvoice.ui \
     adduserdialog.ui \
     choicedate.ui \
     editusers.ui \
+    entrywindow.ui \
+    invoicewindow.ui \
     mainwindow.ui \
     showmonth.ui \
     viewresult.ui

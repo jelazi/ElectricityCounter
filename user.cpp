@@ -156,10 +156,55 @@ Entry User::getEntryByDate(MyDate date, TypeEntry typeEntry) {
   return entry;
 }
 
+void User::setName(const QString &value)
+{
+    name = value;
+}
+
+QList<Entry> User::getRealEntriesVT() const
+{
+    return realEntriesVT;
+}
+
+void User::setRealEntriesVT(const QList<Entry> &value)
+{
+    realEntriesVT = value;
+}
+
+QList<Entry> User::getRealEntriesNT() const
+{
+    return realEntriesNT;
+}
+
+void User::setRealEntriesNT(const QList<Entry> &value)
+{
+    realEntriesNT = value;
+}
+
+Entry User::getInitialDesicionNT() const
+{
+    return initialDesicionNT;
+}
+
+void User::setInitialDesicionNT(const Entry &value)
+{
+    initialDesicionNT = value;
+}
+
+Entry User::getInitialDesicionVT() const
+{
+    return initialDesicionVT;
+}
+
+void User::setInitialDesicionVT(const Entry &value)
+{
+    initialDesicionVT = value;
+}
+
 bool User::containsEntry(MyDate date)  {
-  foreach (Entry ent, realEntriesNT) {
-      if (ent.date.isSameDate(date)) {
-          foreach (Entry entVT, realEntriesVT) {
+    foreach (Entry ent, realEntriesNT) {
+        if (ent.date.isSameDate(date)) {
+            foreach (Entry entVT, realEntriesVT) {
               if (entVT.date.isSameDate(date)) return true;
             }
           return false;
